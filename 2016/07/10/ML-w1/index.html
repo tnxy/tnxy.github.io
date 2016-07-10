@@ -9,9 +9,9 @@
     
     <meta name="author" content="xiyu">
     
-    <meta name="description" content="机器学习课程笔记系列 I—— Andrew Ng的Machine Learning  w1==========
-DefinitionMachine learning：give computers to learn without being explicitly programmed.
-Classi">
+    <meta name="description" content="机器学习课程笔记系列 I—— Andrew Ng的Machine Learning  w1DefinitionMachine learning：give computers to learn without being explicitly programmed.
+Classification
+Su">
     
     
     
@@ -75,7 +75,7 @@ Classi">
     </p>
   <p class="article-time">
     <time datetime="2016-07-10T11:40:06.000Z" itemprop="datePublished">2016-07-10</time>
-    Updated:<time datetime="2016-07-10T14:44:02.000Z" itemprop="dateModified">2016-07-10</time>
+    Updated:<time datetime="2016-07-10T14:47:28.000Z" itemprop="dateModified">2016-07-10</time>
     
   </p>
 </header>
@@ -84,11 +84,10 @@ Classi">
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#机器学习课程笔记系列-I"><span class="toc-number">1.</span> <span class="toc-text">机器学习课程笔记系列 I</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#——-Andrew-Ng的Machine-Learning-w1"><span class="toc-number">2.</span> <span class="toc-text">—— Andrew Ng的Machine Learning  w1</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Definition"><span class="toc-number">2.1.</span> <span class="toc-text">Definition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Classification"><span class="toc-number">2.2.</span> <span class="toc-text">Classification</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Supervised-learning-algorithm-——-Linear-Regression-with-one-variable"><span class="toc-number">2.3.</span> <span class="toc-text">Supervised learning algorithm —— Linear Regression with one variable</span></a></li></ol></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#机器学习课程笔记系列-I"><span class="toc-number">1.</span> <span class="toc-text">机器学习课程笔记系列 I</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#——-Andrew-Ng的Machine-Learning-w1"><span class="toc-number">2.</span> <span class="toc-text">—— Andrew Ng的Machine Learning  w1</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Definition"><span class="toc-number">2.1.</span> <span class="toc-text">Definition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Classification"><span class="toc-number">2.2.</span> <span class="toc-text">Classification</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Supervised-learning-algorithm-——-Linear-Regression-with-one-variable"><span class="toc-number">2.3.</span> <span class="toc-text">Supervised learning algorithm —— Linear Regression with one variable</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Example"><span class="toc-number">2.3.1.</span> <span class="toc-text">1. Example:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Model"><span class="toc-number">2.3.2.</span> <span class="toc-text">2. Model:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Solution-1-Gradient-descent-algorithm"><span class="toc-number">2.3.3.</span> <span class="toc-text">3.Solution 1- Gradient descent algorithm</span></a></li></ol></li></ol></li></ol>
 		</div>
 		
-		<h1 id="机器学习课程笔记系列-I"><a href="#机器学习课程笔记系列-I" class="headerlink" title="机器学习课程笔记系列 I"></a>机器学习课程笔记系列 I</h1><h1 id="——-Andrew-Ng的Machine-Learning-w1"><a href="#——-Andrew-Ng的Machine-Learning-w1" class="headerlink" title="—— Andrew Ng的Machine Learning  w1"></a>—— Andrew Ng的Machine Learning  w1</h1><p>==========</p>
-<h2 id="Definition"><a href="#Definition" class="headerlink" title="Definition"></a>Definition</h2><p>Machine learning：give computers to learn without being explicitly programmed.</p>
+		<h1 id="机器学习课程笔记系列-I"><a href="#机器学习课程笔记系列-I" class="headerlink" title="机器学习课程笔记系列 I"></a>机器学习课程笔记系列 I</h1><h1 id="——-Andrew-Ng的Machine-Learning-w1"><a href="#——-Andrew-Ng的Machine-Learning-w1" class="headerlink" title="—— Andrew Ng的Machine Learning  w1"></a>—— Andrew Ng的Machine Learning  w1</h1><h2 id="Definition"><a href="#Definition" class="headerlink" title="Definition"></a>Definition</h2><p>Machine learning：give computers to learn without being explicitly programmed.</p>
 <h2 id="Classification"><a href="#Classification" class="headerlink" title="Classification"></a>Classification</h2><ul>
 <li>Supervised learning algorithm: knowing the right answer for each sample (with labels), input-&gt;???hypothesis???-&gt;output<ul>
 <li>Regression: output is real-valued;e.g. housing price; Methods:Gradient Descent Algorithm, * Normalization Equation.</li>
@@ -99,12 +98,10 @@ Classi">
 </code></pre></li>
 <li>Reinforced learning algorithm</li>
 </ul>
-<h2 id="Supervised-learning-algorithm-——-Linear-Regression-with-one-variable"><a href="#Supervised-learning-algorithm-——-Linear-Regression-with-one-variable" class="headerlink" title="Supervised learning algorithm —— Linear Regression with one variable"></a>Supervised learning algorithm —— Linear Regression with one variable</h2><p><strong>1. Example:</strong></p>
-<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-10%20%E4%B8%8B%E5%8D%883.13.36.png" alt="image"></p>
+<h2 id="Supervised-learning-algorithm-——-Linear-Regression-with-one-variable"><a href="#Supervised-learning-algorithm-——-Linear-Regression-with-one-variable" class="headerlink" title="Supervised learning algorithm —— Linear Regression with one variable"></a>Supervised learning algorithm —— Linear Regression with one variable</h2><h3 id="1-Example"><a href="#1-Example" class="headerlink" title="1. Example:"></a><strong>1. Example:</strong></h3><p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-10%20%E4%B8%8B%E5%8D%883.13.36.png" alt="image"></p>
 <p>Variable notation:<br>m:numbers of training examples<br>X:input variables or defined features<br>Y:output variables or predicated values<br>(x,y):one training example<br>(xi,yi):ith training example</p>
 <p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-10%20%E4%B8%8B%E5%8D%883.29.08.png" alt="image"></p>
-<p><strong>2. Model:</strong></p>
-<ul>
+<h3 id="2-Model"><a href="#2-Model" class="headerlink" title="2. Model:"></a><strong>2. Model:</strong></h3><ul>
 <li>hypothesis: h(x)=theta0+theta1*x<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-10%20%E4%B8%8B%E5%8D%882.55.49.png" alt="image"></li>
 <li>cost function/Squared error function J:<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-10%20%E4%B8%8B%E5%8D%882.55.19.png" alt="image"></li>
 <li>parameters:<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-10%20%E4%B8%8B%E5%8D%883.02.06.png" alt="image"></li>
@@ -122,8 +119,7 @@ Classi">
 <p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-10%20%E4%B8%8B%E5%8D%886.13.11.png" alt="image"></p>
 <p>Contour plots(Contour figures).</p>
 <p>In a diffrent color, a series of (theta0,theta1) in a same J.<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-10%20%E4%B8%8B%E5%8D%886.25.56.png" alt="image"></p>
-<p><strong>3.Solution 1- Gradient descent algorithm</strong></p>
-<p>how to find a better parameters(theta0,theta1) to get a minimized J</p>
+<h3 id="3-Solution-1-Gradient-descent-algorithm"><a href="#3-Solution-1-Gradient-descent-algorithm" class="headerlink" title="3.Solution 1- Gradient descent algorithm"></a><strong>3.Solution 1- Gradient descent algorithm</strong></h3><p>how to find a better parameters(theta0,theta1) to get a minimized J</p>
 <p>1) Gradient descent algorithm<br>通用的方法，也可用于logistic regression<br>可以get local optima。<br>在linear regression问题中，可以保证global optima （？？？）<br>中心思想：<br>theta（j）同步更新，每次下降一点点，下降的程度=alpha*J’(theta ith),下降速度为alpha-learning rate.</p>
 <p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-10%20%E4%B8%8B%E5%8D%886.47.44.png" alt="image"></p>
 <p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-10%20%E4%B8%8B%E5%8D%886.49.23.png" alt="image"></p>
@@ -159,7 +155,7 @@ Classi">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Coursera/">Coursera</a><a href="/tags/Andrew-Ng/">Andrew Ng</a>
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Coursera/">Coursera</a><a href="/tags/Andrew-Ng/">Andrew Ng</a>
   </div>
 
 
@@ -189,7 +185,7 @@ Classi">
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#机器学习课程笔记系列-I"><span class="toc-number">1.</span> <span class="toc-text">机器学习课程笔记系列 I</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#——-Andrew-Ng的Machine-Learning-w1"><span class="toc-number">2.</span> <span class="toc-text">—— Andrew Ng的Machine Learning  w1</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Definition"><span class="toc-number">2.1.</span> <span class="toc-text">Definition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Classification"><span class="toc-number">2.2.</span> <span class="toc-text">Classification</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Supervised-learning-algorithm-——-Linear-Regression-with-one-variable"><span class="toc-number">2.3.</span> <span class="toc-text">Supervised learning algorithm —— Linear Regression with one variable</span></a></li></ol></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#机器学习课程笔记系列-I"><span class="toc-number">1.</span> <span class="toc-text">机器学习课程笔记系列 I</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#——-Andrew-Ng的Machine-Learning-w1"><span class="toc-number">2.</span> <span class="toc-text">—— Andrew Ng的Machine Learning  w1</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Definition"><span class="toc-number">2.1.</span> <span class="toc-text">Definition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Classification"><span class="toc-number">2.2.</span> <span class="toc-text">Classification</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Supervised-learning-algorithm-——-Linear-Regression-with-one-variable"><span class="toc-number">2.3.</span> <span class="toc-text">Supervised learning algorithm —— Linear Regression with one variable</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Example"><span class="toc-number">2.3.1.</span> <span class="toc-text">1. Example:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Model"><span class="toc-number">2.3.2.</span> <span class="toc-text">2. Model:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Solution-1-Gradient-descent-algorithm"><span class="toc-number">2.3.3.</span> <span class="toc-text">3.Solution 1- Gradient descent algorithm</span></a></li></ol></li></ol></li></ol>
   </div>
 
 <div id="asidepart">
@@ -215,6 +211,8 @@ Classi">
 			<li><a href="/tags/Andrew-Ng/" title="Andrew Ng">Andrew Ng<sup>1</sup></a></li>
 		
 			<li><a href="/tags/Coursera/" title="Coursera">Coursera<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>1</sup></a></li>
 		
 		</ul>
 </div>
