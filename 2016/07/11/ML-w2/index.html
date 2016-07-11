@@ -1,0 +1,367 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>ML-w2 | xiyuのworkspace</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="xiyu">
+    
+    <meta name="description" content="机器学习课程笔记系列 I —— Andrew Ng w2
+
+一、多变量线性回归（Multivariate Linear Regression）Examplemultiple feature/variablese.g housing price
+
+Hypothesis:x0=1，X is n+1 di">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="xiyuのworkspace" title="xiyuのworkspace"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="xiyuのworkspace">xiyuのworkspace</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:tnxy.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/07/11/ML-w2/" title="ML-w2" itemprop="url">ML-w2</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://tnxy.github.io" title="xiyu">xiyu</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2016-07-11T05:32:41.000Z" itemprop="datePublished">2016-07-11</time>
+    Updated:<time datetime="2016-07-11T05:44:50.000Z" itemprop="dateModified">2016-07-11</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一、多变量线性回归（Multivariate-Linear-Regression）"><span class="toc-number">1.</span> <span class="toc-text">一、多变量线性回归（Multivariate Linear Regression）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Example"><span class="toc-number">1.1.</span> <span class="toc-text">Example</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Model"><span class="toc-number">1.2.</span> <span class="toc-text">Model</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二、Solution-Gradient-Descent-Algorithm"><span class="toc-number">2.</span> <span class="toc-text">二、Solution-Gradient Descent Algorithm</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Practical-Tip1-Feature-Scaling"><span class="toc-number">2.1.</span> <span class="toc-text">Practical Tip1: Feature Scaling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Practical-Tip2-Learning-Rate"><span class="toc-number">2.2.</span> <span class="toc-text">Practical Tip2: Learning Rate</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三、Features-and-Polynomial-Regression"><span class="toc-number">3.</span> <span class="toc-text">三、Features and Polynomial Regression</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#四、Solution-Normal-Equation正规方程"><span class="toc-number">4.</span> <span class="toc-text">四、Solution-Normal Equation正规方程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#intuition"><span class="toc-number">4.1.</span> <span class="toc-text">intuition</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#model"><span class="toc-number">4.2.</span> <span class="toc-text">model</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gradient-descent-algorithm-vs-normal-equation"><span class="toc-number">4.3.</span> <span class="toc-text">gradient descent algorithm vs normal equation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#non-invertibility"><span class="toc-number">4.4.</span> <span class="toc-text">non-invertibility</span></a></li></ol></li></ol>
+		</div>
+		
+		<p>机器学习课程笔记系列 I —— Andrew Ng w2</p>
+<hr>
+<h2 id="一、多变量线性回归（Multivariate-Linear-Regression）"><a href="#一、多变量线性回归（Multivariate-Linear-Regression）" class="headerlink" title="一、多变量线性回归（Multivariate Linear Regression）"></a>一、多变量线性回归（Multivariate Linear Regression）</h2><h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><p>multiple feature/variables<br>e.g housing price</p>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-10%20%E4%B8%8B%E5%8D%8811.00.38.png" alt="image"></p>
+<p>Hypothesis:x0=1，X is n+1 dimension<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-10%20%E4%B8%8B%E5%8D%8811.05.04.png" alt="image"></p>
+<h3 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h3><p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8A%E5%8D%888.59.39.png" alt="image"></p>
+<hr>
+<h2 id="二、Solution-Gradient-Descent-Algorithm"><a href="#二、Solution-Gradient-Descent-Algorithm" class="headerlink" title="二、Solution-Gradient Descent Algorithm"></a>二、Solution-Gradient Descent Algorithm</h2><p>特点: x0=1,theta、x is n+1 dimension<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8A%E5%8D%889.01.12.png" alt="image"></p>
+<h3 id="Practical-Tip1-Feature-Scaling"><a href="#Practical-Tip1-Feature-Scaling" class="headerlink" title="Practical Tip1: Feature Scaling"></a>Practical Tip1: Feature Scaling</h3><p>featrue scaling（归一化）：通过将xi归一到[-1,1]的大致范围内，加快找寻速度，迭代循环次数更少。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8A%E5%8D%889.08.15.png" alt="image"></p>
+<p>feature scaling有很多种办法，此课程中 xi-ui/range(或者sigma)</p>
+<p>通常 x范围在[-3,3]，都是可以接受的。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8A%E5%8D%889.17.47.png" alt="image"></p>
+<h3 id="Practical-Tip2-Learning-Rate"><a href="#Practical-Tip2-Learning-Rate" class="headerlink" title="Practical Tip2: Learning Rate"></a>Practical Tip2: Learning Rate</h3><p>alpha的选择：</p>
+<p>1.alpha太小，slow convergenc</p>
+<p>2.alpha太大，J可能不能每次迭代都下降，最终可能不能收敛。</p>
+<p>Try一系列的alpha值：<br>…,0.001,0.003,0.01,0.03,0.1,0.3,1,…</p>
+<ul>
+<li><p>alpha合适<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8A%E5%8D%889.43.20.png" alt="image"></p>
+</li>
+<li><p>alpha太大，J曲线 - use small alpha<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8A%E5%8D%889.46.12.png" alt="image"></p>
+</li>
+<li><p>alpha太小，J下降速度太缓慢<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8A%E5%8D%889.51.54.png" alt="image"></p>
+</li>
+</ul>
+<hr>
+<h2 id="三、Features-and-Polynomial-Regression"><a href="#三、Features-and-Polynomial-Regression" class="headerlink" title="三、Features and Polynomial Regression"></a>三、Features and Polynomial Regression</h2><p>feature的选择-多项式回归<br>选择新的area特征，替代原来的frontage、depth特征。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8A%E5%8D%8810.08.56.png" alt="image"><br>由于二次方，h(x)曲线会掉下来，所以采取三次方。</p>
+<p>注意，size/1000,size*size/1000,000,size3次方/1000,000,000 做归一化<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8A%E5%8D%8810.01.43.png" alt="image"></p>
+<p>feature可以有其他的选择，比如sqr（size）<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8A%E5%8D%8810.09.19.png" alt="image"></p>
+<hr>
+<h2 id="四、Solution-Normal-Equation正规方程"><a href="#四、Solution-Normal-Equation正规方程" class="headerlink" title="四、Solution-Normal Equation正规方程"></a>四、Solution-Normal Equation正规方程</h2><h3 id="intuition"><a href="#intuition" class="headerlink" title="intuition"></a>intuition</h3><p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8B%E5%8D%881.06.20.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8B%E5%8D%881.07.58.png" alt="image"></p>
+<h3 id="model"><a href="#model" class="headerlink" title="model"></a>model</h3><p>octave中，pinv可以计算伪逆，inv计算矩阵逆（矩阵得是非奇异方阵）。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8B%E5%8D%881.08.52.png" alt="image"></p>
+<h3 id="gradient-descent-algorithm-vs-normal-equation"><a href="#gradient-descent-algorithm-vs-normal-equation" class="headerlink" title="gradient descent algorithm vs normal equation"></a>gradient descent algorithm vs normal equation</h3><p>gradient descent: 需要选择alpha，但是n大work well</p>
+<p>normal equation：不需要选择alpha，但是n很大时，计算矩阵逆的计算量大。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8B%E5%8D%881.10.19.png" alt="image"></p>
+<h3 id="non-invertibility"><a href="#non-invertibility" class="headerlink" title="non-invertibility"></a>non-invertibility</h3><p>如果是|A|=0或者不满秩的情况（奇异矩阵/退化矩阵），矩阵不可逆。</p>
+<p>原因主要为：</p>
+<p>1.有重复feature<br>2.特征值太多了。（减少特征值或者采用regularization的方法。）<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8B%E5%8D%881.24.20.png" alt="image"></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Coursera/">Coursera</a><a href="/tags/Andrew-Ng/">Andrew Ng</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://tnxy.github.io/2016/07/11/ML-w2/" data-title="ML-w2 | xiyuのworkspace" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/07/10/ML-w1/"  title="ML-w1">
+ <strong>NEXT:</strong><br/> 
+ <span>ML-w1
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一、多变量线性回归（Multivariate-Linear-Regression）"><span class="toc-number">1.</span> <span class="toc-text">一、多变量线性回归（Multivariate Linear Regression）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Example"><span class="toc-number">1.1.</span> <span class="toc-text">Example</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Model"><span class="toc-number">1.2.</span> <span class="toc-text">Model</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二、Solution-Gradient-Descent-Algorithm"><span class="toc-number">2.</span> <span class="toc-text">二、Solution-Gradient Descent Algorithm</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Practical-Tip1-Feature-Scaling"><span class="toc-number">2.1.</span> <span class="toc-text">Practical Tip1: Feature Scaling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Practical-Tip2-Learning-Rate"><span class="toc-number">2.2.</span> <span class="toc-text">Practical Tip2: Learning Rate</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三、Features-and-Polynomial-Regression"><span class="toc-number">3.</span> <span class="toc-text">三、Features and Polynomial Regression</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#四、Solution-Normal-Equation正规方程"><span class="toc-number">4.</span> <span class="toc-text">四、Solution-Normal Equation正规方程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#intuition"><span class="toc-number">4.1.</span> <span class="toc-text">intuition</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#model"><span class="toc-number">4.2.</span> <span class="toc-text">model</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gradient-descent-algorithm-vs-normal-equation"><span class="toc-number">4.3.</span> <span class="toc-text">gradient descent algorithm vs normal equation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#non-invertibility"><span class="toc-number">4.4.</span> <span class="toc-text">non-invertibility</span></a></li></ol></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Andrew-Ng/" title="Andrew Ng">Andrew Ng<sup>2</sup></a></li>
+		
+			<li><a href="/tags/Coursera/" title="Coursera">Coursera<sup>2</sup></a></li>
+		
+			<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		<a href="https://github.com/https://github.com/tnxy" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2016 
+		
+		<a href="http://tnxy.github.io" target="_blank" title="xiyu">xiyu</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>
