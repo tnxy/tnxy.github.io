@@ -42,7 +42,7 @@ Tumor: Malignant/Benign">
 				<h1 class="site-name"><a href="/" title="xiyuのworkspace">xiyuのworkspace</a></h1>
 				<h2 class="blog-motto"></h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -55,7 +55,7 @@ Tumor: Malignant/Benign">
 					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:tnxy.github.io">
 					</form>
 					
@@ -79,7 +79,7 @@ Tumor: Malignant/Benign">
     </p>
   <p class="article-time">
     <time datetime="2016-07-12T14:03:47.000Z" itemprop="datePublished">2016-07-12</time>
-    Updated:<time datetime="2016-07-12T14:14:25.000Z" itemprop="dateModified">2016-07-12</time>
+    更新日期:<time datetime="2016-07-12T14:27:03.000Z" itemprop="dateModified">2016-07-12</time>
     
   </p>
 </header>
@@ -87,7 +87,7 @@ Tumor: Malignant/Benign">
 		
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
+			<strong class="toc-title">文章目录</strong>
 		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#监督学习-classification问题"><span class="toc-number">1.</span> <span class="toc-text">监督学习-classification问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Preface"><span class="toc-number">1.1.</span> <span class="toc-text">Preface</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Logistic-Regression-Model"><span class="toc-number">1.2.</span> <span class="toc-text">Logistic Regression Model</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Definition"><span class="toc-number">1.2.1.</span> <span class="toc-text">Definition</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cost-function"><span class="toc-number">1.2.2.</span> <span class="toc-text">cost function</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#common-cost-function"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">common cost function</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#cost-function-for-logistic-regression"><span class="toc-number">1.2.2.2.</span> <span class="toc-text">cost function for logistic regression</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#证明cost-function"><span class="toc-number">1.2.2.3.</span> <span class="toc-text">证明cost function</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#minimize-J"><span class="toc-number">1.2.3.</span> <span class="toc-text">minimize J</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-Gradient-descent-algorithm"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">1.Gradient descent algorithm</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-other-alogrithms"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">2.other alogrithms</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pseudocode"><span class="toc-number">1.2.4.</span> <span class="toc-text">pseudocode</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Multiclass-Classification"><span class="toc-number">1.3.</span> <span class="toc-text">Multiclass Classification</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Example"><span class="toc-number">1.3.1.</span> <span class="toc-text">Example</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Solution"><span class="toc-number">1.3.2.</span> <span class="toc-text">Solution</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Solving-overfitting-problem"><span class="toc-number">2.</span> <span class="toc-text">Solving overfitting problem</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Definition-overfitting"><span class="toc-number">2.1.</span> <span class="toc-text">Definition overfitting</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Solution-Regularation"><span class="toc-number">2.2.</span> <span class="toc-text">Solution - Regularation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Model-cost-function"><span class="toc-number">2.2.1.</span> <span class="toc-text">Model-cost function</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Regularized-Linear-Regression"><span class="toc-number">2.2.2.</span> <span class="toc-text">Regularized Linear Regression</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Gradient-Descent-Algorithm"><span class="toc-number">2.2.2.1.</span> <span class="toc-text">Gradient Descent Algorithm</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Normal-Equation"><span class="toc-number">2.2.2.2.</span> <span class="toc-text">Normal Equation</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Regularized-Logistic-Regression"><span class="toc-number">2.2.3.</span> <span class="toc-text">Regularized Logistic Regression</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Gradient-Descent-Algorithm-1"><span class="toc-number">2.2.3.1.</span> <span class="toc-text">Gradient Descent Algorithm</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Summary-for-Regularation-梯步迭代"><span class="toc-number">2.2.4.</span> <span class="toc-text">Summary for Regularation(梯步迭代)</span></a></li></ol></li></ol></li></ol>
 		</div>
 		
@@ -106,26 +106,27 @@ Tumor: Malignant/Benign">
 </li>
 </ul>
 <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8A%E5%8D%889.01.12.png" alt="image"></p>
-<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8A%E5%8D%889.43.44.png" alt="image"><br>对于classification问题，如果采用linear regression取阀值的话，可能存在两个问题：</p>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8B%E5%8D%889.43.44.png" alt="image"></p>
+<p>对于classification问题，如果采用linear regression取阀值的话，可能存在两个问题：</p>
 <ol>
 <li>预测结果不理想。由于通过训练集确定theta，可能训练集增加新的example（比如图最右边的红色x点）导致回归线的从紫色移动到蓝色。临界点从紫色实点移动到蓝色实点。</li>
 <li>h(x)结果超出y的范围。e.g.可能小于0，或者大于1.</li>
 </ol>
 <p>因此，需要寻找一个新的模型——logistic regression，h(x)为单调递增连续函数，h(x)取值范围[0,1]</p>
-<h2 id="Logistic-Regression-Model"><a href="#Logistic-Regression-Model" class="headerlink" title="Logistic Regression Model"></a>Logistic Regression Model</h2><h3 id="Definition"><a href="#Definition" class="headerlink" title="Definition"></a>Definition</h3><p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8A%E5%8D%889.13.21.png" alt="image"></p>
+<h2 id="Logistic-Regression-Model"><a href="#Logistic-Regression-Model" class="headerlink" title="Logistic Regression Model"></a>Logistic Regression Model</h2><h3 id="Definition"><a href="#Definition" class="headerlink" title="Definition"></a>Definition</h3><p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8B%E5%8D%889.13.21.png" alt="image"></p>
 <p>h(x)=g(z)=1/(1+e^-z),z=theta*x</p>
 <ol>
-<li><p>h(x)含义：<br>对于input x，预测y=1的概率 P(y=1|x,theta)<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8A%E5%8D%889.33.57.png" alt="image"></p>
+<li><p>h(x)含义：<br>对于input x，预测y=1的概率 P(y=1|x,theta)<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8B%E5%8D%889.33.57.png" alt="image"></p>
 </li>
 <li><p>h(x)怎么用于判断</p>
 </li>
 </ol>
 <p>g(z)=h(x)&gt;0.5,或者z=theta*x&gt;0,预测y=1</p>
-<p>g(z)=h(x)&lt;0.5,或者z=theta*x&lt;0,预测y=1<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8A%E5%8D%889.48.51.png" alt="image"></p>
+<p>g(z)=h(x)&lt;0.5,或者z=theta*x&lt;0,预测y=1<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8B%E5%8D%889.48.51.png" alt="image"></p>
 <ol>
 <li>h(x)使用案例：<br>反向，如果计算出了theta，通过z=-3+x1+x2&gt;0,预测y=1，decision boundary：x1+x2&gt;3 &lt;=&gt; h（x）&gt;0.5</li>
 </ol>
-<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8A%E5%8D%889.55.07.png" alt="image"></p>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8B%E5%8D%889.55.07.png" alt="image"></p>
 <p>decision boundary可能是非线性的：<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8B%E5%8D%8810.01.27.png" alt="image"></p>
 <h3 id="cost-function"><a href="#cost-function" class="headerlink" title="cost function"></a>cost function</h3><h4 id="common-cost-function"><a href="#common-cost-function" class="headerlink" title="common cost function"></a>common cost function</h4><p>机器学习或者统计机器学习常见的损失函数如下：</p>
 <ol>
@@ -155,18 +156,20 @@ Tumor: Malignant/Benign">
 <h4 id="证明cost-function"><a href="#证明cost-function" class="headerlink" title="证明cost function"></a>证明cost function</h4><p>由于</p>
 <p>P(y=1|x,theta)=h(x)</p>
 <p>P(y=0|x,theta)=1-h(x)</p>
-<p>概率分布P(y|x,theta)=h(x)^y * (1-h(x))^(1-y)<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8B%E5%8D%88 11.38.13.png" alt="image"><br>由于每个样本是独立同分布，拟然函数如下：<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8B%E5%8D%88 11.40.00.png" alt="image"><br>采用对数损失函数，<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-12%20%E4%B8%8B%E5%8D%8812.00.53.png" alt="image"></p>
-<h3 id="minimize-J"><a href="#minimize-J" class="headerlink" title="minimize J"></a>minimize J</h3><p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-12%20%E4%B8%8B%E5%8D%8812.02.32.png" alt="image"></p>
-<h4 id="1-Gradient-descent-algorithm"><a href="#1-Gradient-descent-algorithm" class="headerlink" title="1.Gradient descent algorithm"></a>1.Gradient descent algorithm</h4><p>对于J，线性回归与逻辑回归的cost function、h（x）不同。<br>但是，对于gradient descent（J对theta的导数）是一样的。只是其中h（x）的模型不同。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-12%20%E4%B8%8B%E5%8D%8812.03.47.png" alt="image"><br>蓝色的是线性回归的h（x），红色的是逻辑回归的<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-12%20%E4%B8%8B%E5%8D%8812.08.20.png" alt="image"></p>
+<p>概率分布P(y|x,theta)=h(x)^y * (1-h(x))^(1-y)<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8B%E5%8D%8811.38.13.png" alt="image"></p>
+<p>由于每个样本是独立同分布，拟然函数如下：<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-11%20%E4%B8%8B%E5%8D%8811.40.00.png" alt="image"></p>
+<p>采用对数损失函数，<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-12%20%E4%B8%8A%E5%8D%8812.00.53.png" alt="image"></p>
+<h3 id="minimize-J"><a href="#minimize-J" class="headerlink" title="minimize J"></a>minimize J</h3><p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-12%20%E4%B8%8A%E5%8D%8812.02.32.png" alt="image"></p>
+<h4 id="1-Gradient-descent-algorithm"><a href="#1-Gradient-descent-algorithm" class="headerlink" title="1.Gradient descent algorithm"></a>1.Gradient descent algorithm</h4><p>对于J，线性回归与逻辑回归的cost function、h（x）不同。<br>但是，对于gradient descent（J对theta的导数）是一样的。只是其中h（x）的模型不同。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-12%20%E4%B8%8A%E5%8D%8812.03.47.png" alt="image"><br>蓝色的是线性回归的h（x），红色的是逻辑回归的<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-12%20%E4%B8%8A%E5%8D%8812.08.20.png" alt="image"></p>
 <blockquote>
 <p>证明导数相似的过程</p>
 </blockquote>
 <ol>
-<li>g(z)导数如下<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-12%20%E4%B8%8B%E5%8D%8812.10.13.png" alt="image"></li>
-<li>单个样本：<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-12%20%E4%B8%8B%E5%8D%8812.17.22.png" alt="image"></li>
-<li>扩展至全体样本<br><img src="/Users/wong/Desktop/屏幕快照 2016-07-12 上午12.24.00.png" alt="image"></li>
+<li>g(z)导数如下<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-12%20%E4%B8%8A%E5%8D%8812.10.13.png" alt="image"></li>
+<li>单个样本：<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-12%20%E4%B8%8A%E5%8D%8812.17.22.png" alt="image"></li>
+<li>扩展至全体样本<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-12%20%E4%B8%8A%E5%8D%8812.24.00.png" alt="image"></li>
 </ol>
-<h4 id="2-other-alogrithms"><a href="#2-other-alogrithms" class="headerlink" title="2.other alogrithms"></a>2.other alogrithms</h4><p>Conjugate，BFGS，L-BFGS等，更聪明的迭代循环，不需要人工选择alpha，比GD更快，但是更复杂。<br><img src="/Users/wong/Desktop/屏幕快照 2016-07-12 上午12.27.21.png" alt="image"></p>
+<h4 id="2-other-alogrithms"><a href="#2-other-alogrithms" class="headerlink" title="2.other alogrithms"></a>2.other alogrithms</h4><p>Conjugate，BFGS，L-BFGS等，更聪明的迭代循环，不需要人工选择alpha，比GD更快，但是更复杂。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-12%20%E4%B8%8A%E5%8D%8812.27.21.png" alt="image"></p>
 <h3 id="pseudocode"><a href="#pseudocode" class="headerlink" title="pseudocode"></a>pseudocode</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">function [ jVal,gradient ] = costFunction( theta, X, y)  </div><div class="line">%hypothesis is logistic regression,costfunction returen J value and gradient     </div><div class="line">  jVal=(-y&apos;*log(sigmoid(X*theta))-(1-y)&apos;*log(1-sigmoid...(X*theta)))/m;</div><div class="line">  gradient=X&apos;*(sigmoid(X*theta)-y)/m; </div><div class="line"> </div><div class="line">end</div></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">针对</div><div class="line">options = optimset(&apos;GradObj&apos;,&apos;on&apos;,&apos;MaxIter&apos;,100);  </div><div class="line">initialTheta = zeros(2,1)  </div><div class="line">[optTheta,functionVal,exitFlag] = ... </div><div class="line">fminunc(@(t)(costFunction(t, X, y),initialTheta,options);</div></pre></td></tr></table></figure>
 <h2 id="Multiclass-Classification"><a href="#Multiclass-Classification" class="headerlink" title="Multiclass Classification"></a>Multiclass Classification</h2><h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-12%20%E4%B8%8B%E5%8D%888.08.30.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-12%20%E4%B8%8B%E5%8D%888.09.03.png" alt="image"></p>
@@ -174,7 +177,7 @@ Tumor: Malignant/Benign">
 <p>一个新的x，分别放到n个分类器中计算，取可能性最大的一个<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-12%20%E4%B8%8B%E5%8D%888.14.18.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-12%20%E4%B8%8B%E5%8D%888.17.08.png" alt="image"></p>
 <h1 id="Solving-overfitting-problem"><a href="#Solving-overfitting-problem" class="headerlink" title="Solving overfitting problem"></a>Solving overfitting problem</h1><h2 id="Definition-overfitting"><a href="#Definition-overfitting" class="headerlink" title="Definition overfitting"></a>Definition overfitting</h2><p>对于之前讲的linear regression和logistic regression，都可能有overfitting的问题-准确率高，但是general的不好。</p>
 <ul>
-<li><p>对于linear regression<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-12%20%E4%B8%8B%E5%8D%88 8.38.32.png" alt="image"></p>
+<li><p>对于linear regression<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-12%20%E4%B8%8B%E5%8D%888.38.32.png" alt="image"></p>
 </li>
 <li><p>对于logistic regression<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-12%20%E4%B8%8B%E5%8D%888.39.19.png" alt="image"></p>
 </li>
@@ -193,6 +196,7 @@ Tumor: Malignant/Benign">
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">function [ jVal,gradient ] = costFunction( theta, X, y,lambda)  </div><div class="line">%hypothesis is logistic regression,costfunction returen J value and gradient adding penalty  </div><div class="line">   n=size(theta);</div><div class="line">   </div><div class="line"></div><div class="line">   jVal=(-y&apos;*log(sigmoid(X*theta))-(1-y)&apos;*log(1-sigmoid(X*theta)))/m+lambda*theta(2:n,1)&apos;*theta(2:n,1)/(2*m);</div><div class="line"></div><div class="line">   gradiet=X&apos;*(sigmoid(X*theta)-y)/m+lambda*theta/m;</div><div class="line">   </div><div class="line"></div><div class="line">   temp=X&apos;*(sigmoid(X*theta)-y)/m;</div><div class="line">   gradient(1,1)=temp(1,1);</div><div class="line"> </div><div class="line">end</div></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">增加一个位置参数</div><div class="line">options = optimset(&apos;GradObj&apos;,&apos;on&apos;,&apos;MaxIter&apos;,100);  </div><div class="line">initialTheta = zeros(2,1)  </div><div class="line">[theta, J, exit_flag] = ...</div><div class="line">fminunc(@(t)(costFunctionReg(t, X, y, lambda)), initial_theta, options);</div></pre></td></tr></table></figure>
 <h3 id="Summary-for-Regularation-梯步迭代"><a href="#Summary-for-Regularation-梯步迭代" class="headerlink" title="Summary for Regularation(梯步迭代)"></a>Summary for Regularation(梯步迭代)</h3><p>J(theta)=原J(theta)+lambda*theta(2:n,1)^2/(2<em>m)<br>gradient=原gradient+lambda\</em>theta/m<br>同步迭代时，theta=theta(1-alpha*lambda/m)-原gradient</p>
+<p><strong><em>遗留问题，1.为什么regularization可以解决overfitting问题，使曲线smooth。2.为什么正规方程regularized后方阵可逆。</em></strong></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -238,20 +242,20 @@ Tumor: Malignant/Benign">
 </section>
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
+  <strong class="toc-title">文章目录</strong>
   <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#监督学习-classification问题"><span class="toc-number">1.</span> <span class="toc-text">监督学习-classification问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Preface"><span class="toc-number">1.1.</span> <span class="toc-text">Preface</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Logistic-Regression-Model"><span class="toc-number">1.2.</span> <span class="toc-text">Logistic Regression Model</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Definition"><span class="toc-number">1.2.1.</span> <span class="toc-text">Definition</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cost-function"><span class="toc-number">1.2.2.</span> <span class="toc-text">cost function</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#common-cost-function"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">common cost function</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#cost-function-for-logistic-regression"><span class="toc-number">1.2.2.2.</span> <span class="toc-text">cost function for logistic regression</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#证明cost-function"><span class="toc-number">1.2.2.3.</span> <span class="toc-text">证明cost function</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#minimize-J"><span class="toc-number">1.2.3.</span> <span class="toc-text">minimize J</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-Gradient-descent-algorithm"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">1.Gradient descent algorithm</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-other-alogrithms"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">2.other alogrithms</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pseudocode"><span class="toc-number">1.2.4.</span> <span class="toc-text">pseudocode</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Multiclass-Classification"><span class="toc-number">1.3.</span> <span class="toc-text">Multiclass Classification</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Example"><span class="toc-number">1.3.1.</span> <span class="toc-text">Example</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Solution"><span class="toc-number">1.3.2.</span> <span class="toc-text">Solution</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Solving-overfitting-problem"><span class="toc-number">2.</span> <span class="toc-text">Solving overfitting problem</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Definition-overfitting"><span class="toc-number">2.1.</span> <span class="toc-text">Definition overfitting</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Solution-Regularation"><span class="toc-number">2.2.</span> <span class="toc-text">Solution - Regularation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Model-cost-function"><span class="toc-number">2.2.1.</span> <span class="toc-text">Model-cost function</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Regularized-Linear-Regression"><span class="toc-number">2.2.2.</span> <span class="toc-text">Regularized Linear Regression</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Gradient-Descent-Algorithm"><span class="toc-number">2.2.2.1.</span> <span class="toc-text">Gradient Descent Algorithm</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Normal-Equation"><span class="toc-number">2.2.2.2.</span> <span class="toc-text">Normal Equation</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Regularized-Logistic-Regression"><span class="toc-number">2.2.3.</span> <span class="toc-text">Regularized Logistic Regression</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Gradient-Descent-Algorithm-1"><span class="toc-number">2.2.3.1.</span> <span class="toc-text">Gradient Descent Algorithm</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Summary-for-Regularation-梯步迭代"><span class="toc-number">2.2.4.</span> <span class="toc-text">Summary for Regularation(梯步迭代)</span></a></li></ol></li></ol></li></ol>
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
 <div class="categorieslist">
-	<p class="asidetitle">Categories</p>
+	<p class="asidetitle">分类</p>
 		<ul>
 		
 			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>3</sup></a></li>
@@ -262,7 +266,7 @@ Tumor: Malignant/Benign">
 
   
 <div class="tagslist">
-	<p class="asidetitle">Tags</p>
+	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
 			<li><a href="/tags/Andrew-Ng/" title="Andrew Ng">Andrew Ng<sup>3</sup></a></li>
@@ -276,7 +280,7 @@ Tumor: Malignant/Benign">
 
 
   <div class="rsspart">
-	<a href="null" target="_blank" title="rss">RSS</a>
+	<a href="null" target="_blank" title="rss">RSS 订阅</a>
 </div>
 
 </aside>
