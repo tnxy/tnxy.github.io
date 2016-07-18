@@ -1,0 +1,349 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>ML-w5 | xiyuのworkspace</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="xiyu">
+    
+    <meta name="description" content="机器学习课程笔记系列 I —— Andrew Ng w5 
+Neural Networks: Learning##Cost Function分类问题主要分为二分类、多分类问题。此处的主要是多分类问题。L代表层数，Sl代表第L层的单元数，k=SL代表输出层的单元数。Neural Networks的co">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="xiyuのworkspace" title="xiyuのworkspace"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="xiyuのworkspace">xiyuのworkspace</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:tnxy.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/07/19/ML-w5/" title="ML-w5" itemprop="url">ML-w5</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://tnxy.github.io" title="xiyu">xiyu</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2016-07-18T16:07:49.000Z" itemprop="datePublished">2016-07-19</time>
+    Updated:<time datetime="2016-07-18T16:15:05.000Z" itemprop="dateModified">2016-07-19</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Neural-Networks-Learning"><span class="toc-number">1.</span> <span class="toc-text">Neural Networks: Learning</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Backpropagation-in-Practice"><span class="toc-number">1.1.</span> <span class="toc-text">Backpropagation in Practice</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#implementation-note：unrolling-parameters"><span class="toc-number">1.1.1.</span> <span class="toc-text">implementation note：unrolling parameters</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gradient-checking（不局限于先前先后传播算法）"><span class="toc-number">1.1.2.</span> <span class="toc-text">gradient checking（不局限于先前先后传播算法）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#random-initialization（不局限于先前先后传播算法）"><span class="toc-number">1.1.3.</span> <span class="toc-text">random initialization（不局限于先前先后传播算法）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">1.2.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Application-of-Neural-Networks"><span class="toc-number">1.3.</span> <span class="toc-text">Application of Neural Networks</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Autonomous-Driving"><span class="toc-number">1.3.1.</span> <span class="toc-text">Autonomous Driving</span></a></li></ol></li></ol></li></ol>
+		</div>
+		
+		<p><strong><em> 机器学习课程笔记系列 I —— Andrew Ng w5 </em></strong></p>
+<h1 id="Neural-Networks-Learning"><a href="#Neural-Networks-Learning" class="headerlink" title="Neural Networks: Learning"></a>Neural Networks: Learning</h1><p>##Cost Function<br>分类问题主要分为二分类、多分类问题。此处的主要是多分类问题。<br>L代表层数，Sl代表第L层的单元数，k=SL代表输出层的单元数。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%889.07.10.png" alt="image"><br>Neural Networks的cost function从logistic regionression推广到输出是vector。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%889.19.10.png" alt="image"><br>Tips：从l到l+1层的，thetal是一个<strong><em>S(l+1)xSl</em></strong>的矩阵（不考虑bias）！！！</p>
+<p>##Backpropagation Algorithm<br>计算J及J对theta的导数<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%889.28.44.png" alt="image"><br>回顾向前传播算法<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%889.30.25.png" alt="image"><br>引入一个delta，代表某层某个节点上的错误<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%889.31.48.png" alt="image"><br>伪代码：<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-16%20%E4%B8%8B%E5%8D%888.49.41.jpg" alt="image"><br>tips:delta组成的矩阵，通过j=0判断是</p>
+<p>delta及gradient的证明:</p>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%8810.04.15.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%8810.02.47.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%8810.05.02.png" alt="image"></p>
+<p>##Example<br>forwardpropogation:</p>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%8810.25.15.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%8810.26.21.png" alt="image"><br>Backpropogation:<br>未考虑到bias，第l层的delta等于第l+1层的delta的与thetal的加权平均和。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%8810.55.35.png" alt="image"></p>
+<h2 id="Backpropagation-in-Practice"><a href="#Backpropagation-in-Practice" class="headerlink" title="Backpropagation in Practice"></a>Backpropagation in Practice</h2><h3 id="implementation-note：unrolling-parameters"><a href="#implementation-note：unrolling-parameters" class="headerlink" title="implementation note：unrolling parameters"></a>implementation note：unrolling parameters</h3><p>由于每一层都有一个theta、D矩阵，而且每一层的维度不一样，所以需要把theta跟D都各合并成vector，需要用的时候再reshape出来。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-13%20%E4%B8%8B%E5%8D%889.27.21.png" alt="image"><br>如何从vector转化成每一层的矩阵<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-13%20%E4%B8%8B%E5%8D%889.46.39.png" alt="image"></p>
+<p>costfunction整体思想：在costfunction中对theta做reshape，计算出D后在合并成vector输出<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-13%20%E4%B8%8B%E5%8D%889.55.16.png" alt="image"></p>
+<h3 id="gradient-checking（不局限于先前先后传播算法）"><a href="#gradient-checking（不局限于先前先后传播算法）" class="headerlink" title="gradient checking（不局限于先前先后传播算法）"></a>gradient checking（不局限于先前先后传播算法）</h3><p>神经网络中，由于一个theta的变化会引起下面一长串的数值变化，所以需要通过gradient checking判断代码是否有问题。<br>核心思想：近似J对theta导数，计算J（Θ+ε)、(Θ-ε)两点间的斜率来近似计算导数，看是否两者误差比较小，andrew通常设置可接受的误差范围在10-4次方（0.0001）。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-13%20%E4%B8%8B%E5%8D%8810.29.29.png" alt="image"><br>具体对每个参数的计算如下：<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-13%20%E4%B8%8B%E5%8D%8810.33.29.png" alt="image"><br>比较与导数的差距。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-13%20%E4%B8%8B%E5%8D%8810.35.11.png" alt="image"><br>实施tips：<br>1.参数的unroll跟reshape<br>2.需要做gradient checking。<strong><em>并且在训练完模式的后，预测新的数据集时要注意取消gradient checking</em></strong><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-13%20%E4%B8%8B%E5%8D%8810.45.53.png" alt="image"></p>
+<h3 id="random-initialization（不局限于先前先后传播算法）"><a href="#random-initialization（不局限于先前先后传播算法）" class="headerlink" title="random initialization（不局限于先前先后传播算法）"></a>random initialization（不局限于先前先后传播算法）</h3><p>在神经网络中，theta的初始值是否可以像线性回归、逻辑回归那样初始化为0呢？答案是不可以。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%8811.34.31.png" alt="image"><br>为啥不可以呢？会使得每一层alpha、theta等值相等<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%8811.48.19.png" alt="image"><br>解决办法：打破对称性，在一个区间内产生随机值。<br>此处的ε跟之前gradient checking里的ε不是一回事。具体是[0,1]内产生一个值，2r-1倍的ε。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%8811.50.24.png" alt="image"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>1.选择神经网络结构</p>
+<p>如果大于一层hidden layer，每层的单元数一样，隐藏层越多越好但是计算代价大；并且单元个数与x维度或者features个数相匹配。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-15%20%E4%B8%8B%E5%8D%889.44.38.png" alt="image"></p>
+<p>2.确定完结构后，实施如下：</p>
+<p>① Randomly initialize weights</p>
+<p>② Implement forward propagation to get hθ(x(i)) for any x(i)</p>
+<p>③ Implement code to compute cost function J(θ)</p>
+<p>④ Implement backprop to compute partial derivatives J(θ)<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-15%20%E4%B8%8B%E5%8D%8810.08.34.png" alt="image"></p>
+<p>⑤gradient checking。检测后，disable gradient checking</p>
+<p>⑥通过梯度下降或者其他算法通过costfunction最小化J(θ)。神经网络的J(θ)是个non-convex，通常找到local optima，效果也不错。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-15%20%E4%B8%8B%E5%8D%8810.14.18.png" alt="image"></p>
+<h2 id="Application-of-Neural-Networks"><a href="#Application-of-Neural-Networks" class="headerlink" title="Application of Neural Networks"></a>Application of Neural Networks</h2><h3 id="Autonomous-Driving"><a href="#Autonomous-Driving" class="headerlink" title="Autonomous Driving"></a>Autonomous Driving</h3>  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Coursera/">Coursera</a><a href="/tags/Andrew-Ng/">Andrew Ng</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://tnxy.github.io/2016/07/19/ML-w5/" data-title="ML-w5 | xiyuのworkspace" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/07/19/ML-w4/"  title="ML-w4">
+ <strong>NEXT:</strong><br/> 
+ <span>ML-w4
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Neural-Networks-Learning"><span class="toc-number">1.</span> <span class="toc-text">Neural Networks: Learning</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Backpropagation-in-Practice"><span class="toc-number">1.1.</span> <span class="toc-text">Backpropagation in Practice</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#implementation-note：unrolling-parameters"><span class="toc-number">1.1.1.</span> <span class="toc-text">implementation note：unrolling parameters</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gradient-checking（不局限于先前先后传播算法）"><span class="toc-number">1.1.2.</span> <span class="toc-text">gradient checking（不局限于先前先后传播算法）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#random-initialization（不局限于先前先后传播算法）"><span class="toc-number">1.1.3.</span> <span class="toc-text">random initialization（不局限于先前先后传播算法）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">1.2.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Application-of-Neural-Networks"><span class="toc-number">1.3.</span> <span class="toc-text">Application of Neural Networks</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Autonomous-Driving"><span class="toc-number">1.3.1.</span> <span class="toc-text">Autonomous Driving</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>4</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Andrew-Ng/" title="Andrew Ng">Andrew Ng<sup>4</sup></a></li>
+		
+			<li><a href="/tags/Coursera/" title="Coursera">Coursera<sup>4</sup></a></li>
+		
+			<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>4</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		<a href="https://github.com/https://github.com/tnxy" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2016 
+		
+		<a href="http://tnxy.github.io" target="_blank" title="xiyu">xiyu</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>
