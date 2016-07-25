@@ -10,7 +10,7 @@
     <meta name="author" content="xiyu">
     
     <meta name="description" content="机器学习课程笔记系列 I —— Andrew Ng w5 
-Neural Networks: Learning##Cost Function分类问题主要分为二分类、多分类问题。此处的主要是多分类问题。L代表层数，Sl代表第L层的单元数，k=SL代表输出层的单元数。Neural Networks的co">
+Neural Networks: LearningCost Function分类问题主要分为二分类、多分类问题。此处的主要是多分类问题。L代表层数，Sl代表第L层的单元数，k=SL代表输出层的单元数。Neural Networks的cost">
     
     
     
@@ -37,7 +37,7 @@ Neural Networks: Learning##Cost Function分类问题主要分为二分类、多�
 				<h1 class="site-name"><a href="/" title="xiyuのworkspace">xiyuのworkspace</a></h1>
 				<h2 class="blog-motto"></h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -74,7 +74,7 @@ Neural Networks: Learning##Cost Function分类问题主要分为二分类、多�
     </p>
   <p class="article-time">
     <time datetime="2016-07-18T16:07:49.000Z" itemprop="datePublished">2016-07-19</time>
-    更新日期:<time datetime="2016-07-18T16:15:05.000Z" itemprop="dateModified">2016-07-19</time>
+    更新日期:<time datetime="2016-07-25T12:16:22.000Z" itemprop="dateModified">2016-07-25</time>
     
   </p>
 </header>
@@ -82,16 +82,16 @@ Neural Networks: Learning##Cost Function分类问题主要分为二分类、多�
 		
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目錄</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Neural-Networks-Learning"><span class="toc-number">1.</span> <span class="toc-text">Neural Networks: Learning</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Backpropagation-in-Practice"><span class="toc-number">1.1.</span> <span class="toc-text">Backpropagation in Practice</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#implementation-note：unrolling-parameters"><span class="toc-number">1.1.1.</span> <span class="toc-text">implementation note：unrolling parameters</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gradient-checking（不局限于先前先后传播算法）"><span class="toc-number">1.1.2.</span> <span class="toc-text">gradient checking（不局限于先前先后传播算法）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#random-initialization（不局限于先前先后传播算法）"><span class="toc-number">1.1.3.</span> <span class="toc-text">random initialization（不局限于先前先后传播算法）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">1.2.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Application-of-Neural-Networks"><span class="toc-number">1.3.</span> <span class="toc-text">Application of Neural Networks</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Autonomous-Driving"><span class="toc-number">1.3.1.</span> <span class="toc-text">Autonomous Driving</span></a></li></ol></li></ol></li></ol>
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Neural-Networks-Learning"><span class="toc-number">1.</span> <span class="toc-text">Neural Networks: Learning</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Cost-Function"><span class="toc-number">1.1.</span> <span class="toc-text">Cost Function</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Backpropagation-Algorithm"><span class="toc-number">1.2.</span> <span class="toc-text">Backpropagation Algorithm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Example"><span class="toc-number">1.3.</span> <span class="toc-text">Example</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Backpropagation-in-Practice"><span class="toc-number">1.4.</span> <span class="toc-text">Backpropagation in Practice</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#implementation-note：unrolling-parameters"><span class="toc-number">1.4.1.</span> <span class="toc-text">implementation note：unrolling parameters</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gradient-checking（不局限于先前先后传播算法）"><span class="toc-number">1.4.2.</span> <span class="toc-text">gradient checking（不局限于先前先后传播算法）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#random-initialization（不局限于先前先后传播算法）"><span class="toc-number">1.4.3.</span> <span class="toc-text">random initialization（不局限于先前先后传播算法）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">1.5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Application-of-Neural-Networks"><span class="toc-number">1.6.</span> <span class="toc-text">Application of Neural Networks</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Autonomous-Driving"><span class="toc-number">1.6.1.</span> <span class="toc-text">Autonomous Driving</span></a></li></ol></li></ol></li></ol>
 		</div>
 		
 		<p><strong><em> 机器学习课程笔记系列 I —— Andrew Ng w5 </em></strong></p>
-<h1 id="Neural-Networks-Learning"><a href="#Neural-Networks-Learning" class="headerlink" title="Neural Networks: Learning"></a>Neural Networks: Learning</h1><p>##Cost Function<br>分类问题主要分为二分类、多分类问题。此处的主要是多分类问题。<br>L代表层数，Sl代表第L层的单元数，k=SL代表输出层的单元数。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%889.07.10.png" alt="image"><br>Neural Networks的cost function从logistic regionression推广到输出是vector。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%889.19.10.png" alt="image"><br>Tips：从l到l+1层的，thetal是一个<strong><em>S(l+1)xSl</em></strong>的矩阵（不考虑bias）！！！</p>
-<p>##Backpropagation Algorithm<br>计算J及J对theta的导数<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%889.28.44.png" alt="image"><br>回顾向前传播算法<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%889.30.25.png" alt="image"><br>引入一个delta，代表某层某个节点上的错误<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%889.31.48.png" alt="image"><br>伪代码：<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-16%20%E4%B8%8B%E5%8D%888.49.41.jpg" alt="image"><br>tips:delta组成的矩阵，通过j=0判断是</p>
+<h1 id="Neural-Networks-Learning"><a href="#Neural-Networks-Learning" class="headerlink" title="Neural Networks: Learning"></a>Neural Networks: Learning</h1><h2 id="Cost-Function"><a href="#Cost-Function" class="headerlink" title="Cost Function"></a>Cost Function</h2><p>分类问题主要分为二分类、多分类问题。此处的主要是多分类问题。<br>L代表层数，Sl代表第L层的单元数，k=SL代表输出层的单元数。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%889.07.10.png" alt="image"><br>Neural Networks的cost function从logistic regionression推广到输出是vector。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%889.19.10.png" alt="image"><br>Tips：从l到l+1层的，thetal是一个<strong><em>S(l+1)xSl</em></strong>的矩阵（不考虑bias）！！！</p>
+<h2 id="Backpropagation-Algorithm"><a href="#Backpropagation-Algorithm" class="headerlink" title="Backpropagation Algorithm"></a>Backpropagation Algorithm</h2><p>计算J及J对theta的导数<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%889.28.44.png" alt="image"><br>回顾向前传播算法<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%889.30.25.png" alt="image"><br>引入一个delta，代表某层某个节点上的错误<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%889.31.48.png" alt="image"><br>伪代码：<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-16%20%E4%B8%8B%E5%8D%888.49.41.jpg" alt="image"><br>tips:delta组成的矩阵，通过j=0判断是</p>
 <p>delta及gradient的证明:</p>
 <p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%8810.04.15.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%8810.02.47.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%8810.05.02.png" alt="image"></p>
-<p>##Example<br>forwardpropogation:</p>
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><p>forwardpropogation:</p>
 <p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%8810.25.15.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%8810.26.21.png" alt="image"><br>Backpropogation:<br>未考虑到bias，第l层的delta等于第l+1层的delta的与thetal的加权平均和。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-14%20%E4%B8%8B%E5%8D%8810.55.35.png" alt="image"></p>
 <h2 id="Backpropagation-in-Practice"><a href="#Backpropagation-in-Practice" class="headerlink" title="Backpropagation in Practice"></a>Backpropagation in Practice</h2><h3 id="implementation-note：unrolling-parameters"><a href="#implementation-note：unrolling-parameters" class="headerlink" title="implementation note：unrolling parameters"></a>implementation note：unrolling parameters</h3><p>由于每一层都有一个theta、D矩阵，而且每一层的维度不一样，所以需要把theta跟D都各合并成vector，需要用的时候再reshape出来。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-13%20%E4%B8%8B%E5%8D%889.27.21.png" alt="image"><br>如何从vector转化成每一层的矩阵<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-13%20%E4%B8%8B%E5%8D%889.46.39.png" alt="image"></p>
 <p>costfunction整体思想：在costfunction中对theta做reshape，计算出D后在合并成vector输出<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-13%20%E4%B8%8B%E5%8D%889.55.16.png" alt="image"></p>
@@ -159,20 +159,20 @@ Neural Networks: Learning##Cost Function分类问题主要分为二分类、多�
 </section>
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目錄</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Neural-Networks-Learning"><span class="toc-number">1.</span> <span class="toc-text">Neural Networks: Learning</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Backpropagation-in-Practice"><span class="toc-number">1.1.</span> <span class="toc-text">Backpropagation in Practice</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#implementation-note：unrolling-parameters"><span class="toc-number">1.1.1.</span> <span class="toc-text">implementation note：unrolling parameters</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gradient-checking（不局限于先前先后传播算法）"><span class="toc-number">1.1.2.</span> <span class="toc-text">gradient checking（不局限于先前先后传播算法）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#random-initialization（不局限于先前先后传播算法）"><span class="toc-number">1.1.3.</span> <span class="toc-text">random initialization（不局限于先前先后传播算法）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">1.2.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Application-of-Neural-Networks"><span class="toc-number">1.3.</span> <span class="toc-text">Application of Neural Networks</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Autonomous-Driving"><span class="toc-number">1.3.1.</span> <span class="toc-text">Autonomous Driving</span></a></li></ol></li></ol></li></ol>
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Neural-Networks-Learning"><span class="toc-number">1.</span> <span class="toc-text">Neural Networks: Learning</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Cost-Function"><span class="toc-number">1.1.</span> <span class="toc-text">Cost Function</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Backpropagation-Algorithm"><span class="toc-number">1.2.</span> <span class="toc-text">Backpropagation Algorithm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Example"><span class="toc-number">1.3.</span> <span class="toc-text">Example</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Backpropagation-in-Practice"><span class="toc-number">1.4.</span> <span class="toc-text">Backpropagation in Practice</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#implementation-note：unrolling-parameters"><span class="toc-number">1.4.1.</span> <span class="toc-text">implementation note：unrolling parameters</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gradient-checking（不局限于先前先后传播算法）"><span class="toc-number">1.4.2.</span> <span class="toc-text">gradient checking（不局限于先前先后传播算法）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#random-initialization（不局限于先前先后传播算法）"><span class="toc-number">1.4.3.</span> <span class="toc-text">random initialization（不局限于先前先后传播算法）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">1.5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Application-of-Neural-Networks"><span class="toc-number">1.6.</span> <span class="toc-text">Application of Neural Networks</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Autonomous-Driving"><span class="toc-number">1.6.1.</span> <span class="toc-text">Autonomous Driving</span></a></li></ol></li></ol></li></ol>
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分類</p>
+	<p class="asidetitle">分类</p>
 		<ul>
 		
 			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>5</sup></a></li>
@@ -183,7 +183,7 @@ Neural Networks: Learning##Cost Function分类问题主要分为二分类、多�
 
   
 <div class="tagslist">
-	<p class="asidetitle">標簽</p>
+	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
 			<li><a href="/tags/Andrew-Ng/" title="Andrew Ng">Andrew Ng<sup>5</sup></a></li>
@@ -197,7 +197,7 @@ Neural Networks: Learning##Cost Function分类问题主要分为二分类、多�
 
 
   <div class="rsspart">
-	<a href="null" target="_blank" title="rss">RSS 訂閱</a>
+	<a href="null" target="_blank" title="rss">RSS 订阅</a>
 </div>
 
 </aside>
