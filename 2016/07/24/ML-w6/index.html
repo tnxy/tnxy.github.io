@@ -1,0 +1,453 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>ML-w6 | xiyuのworkspace</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="xiyu">
+    
+    <meta name="description" content="机器学习课程笔记系列 I —— Andrew Ng w6 
+Advice for Applying Machine Learning 1. 评估学习算法的流程 
+ 2. 如何考量一个model的好坏 
+
+##Evaluating a Learning Algorithm
+Deciding what ">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="xiyuのworkspace" title="xiyuのworkspace"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="xiyuのworkspace">xiyuのworkspace</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:tnxy.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/07/24/ML-w6/" title="ML-w6" itemprop="url">ML-w6</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://tnxy.github.io" title="xiyu">xiyu</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2016-07-24T12:06:08.000Z" itemprop="datePublished">2016-07-24</time>
+    更新日期:<time datetime="2016-07-25T12:14:28.000Z" itemprop="dateModified">2016-07-25</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Advice-for-Applying-Machine-Learning"><span class="toc-number">1.</span> <span class="toc-text">Advice for Applying Machine Learning</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Deciding-what-to-try-next"><span class="toc-number">1.0.1.</span> <span class="toc-text">Deciding what to try next</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Evaluating-a-Hypothesis"><span class="toc-number">1.0.2.</span> <span class="toc-text">Evaluating a Hypothesis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Model-Selection-and-Train-Validation-Test-Sets"><span class="toc-number">1.0.3.</span> <span class="toc-text">Model Selection and Train/Validation/Test Sets</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bias-vs-Variance"><span class="toc-number">1.1.</span> <span class="toc-text">Bias vs Variance</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Definition-of-Bias-and-Variance-Problem"><span class="toc-number">1.1.1.</span> <span class="toc-text">Definition of Bias and Variance Problem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Regularization-and-bias-variance"><span class="toc-number">1.1.2.</span> <span class="toc-text">Regularization and bias/variance</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Learning-Curve"><span class="toc-number">1.1.3.</span> <span class="toc-text">Learning Curve</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ideas-behind-Implementation"><span class="toc-number">1.1.4.</span> <span class="toc-text">Ideas behind Implementation</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Machine-Learning-System-Design"><span class="toc-number">2.</span> <span class="toc-text">Machine Learning System Design</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Example-Building-a-spam-classifier"><span class="toc-number">2.1.</span> <span class="toc-text">Example: Building a spam classifier</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#issue-1-prioritizing-what-to-what-to-work-on"><span class="toc-number">2.1.1.</span> <span class="toc-text">issue 1:prioritizing what to what to work on</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#issue-2：a-way-to-systematicly-decide-what-to-do-next-Error-Analysis"><span class="toc-number">2.1.2.</span> <span class="toc-text">issue 2：a way to systematicly decide what to do next-Error Analysis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#issue-3：handling-skewed-data"><span class="toc-number">2.1.3.</span> <span class="toc-text">issue 3：handling skewed data</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Using-Large-Data-Sets"><span class="toc-number">2.2.</span> <span class="toc-text">Using Large Data Sets</span></a></li></ol></li></ol>
+		</div>
+		
+		<p> <strong><em> 机器学习课程笔记系列 I —— Andrew Ng w6 </em></strong></p>
+<h1 id="Advice-for-Applying-Machine-Learning"><a href="#Advice-for-Applying-Machine-Learning" class="headerlink" title="Advice for Applying Machine Learning"></a>Advice for Applying Machine Learning</h1><p><strong> 1. 评估学习算法的流程 </strong></p>
+<p><strong> 2. 如何考量一个model的好坏 </strong></p>
+<hr>
+<p>##Evaluating a Learning Algorithm</p>
+<h3 id="Deciding-what-to-try-next"><a href="#Deciding-what-to-try-next" class="headerlink" title="Deciding what to try next"></a>Deciding what to try next</h3><p>如果test example在traning model上效果不好，怎么办呢？</p>
+<p>可以通过以下这些方式调参：</p>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-18%20%E4%B8%8B%E5%8D%889.49.13.png" alt="image"></p>
+<blockquote>
+<p>通过Machine Learning diagnostic（耗时）,可能有效获得如何提高performance的指导。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-18%20%E4%B8%8B%E5%8D%889.50.37.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-18%20%E4%B8%8B%E5%8D%889.52.09.png" alt="image"></p>
+</blockquote>
+<h3 id="Evaluating-a-Hypothesis"><a href="#Evaluating-a-Hypothesis" class="headerlink" title="Evaluating a Hypothesis"></a>Evaluating a Hypothesis</h3><p>overfitting example:<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-18%20%E4%B8%8B%E5%8D%8810.33.33.png" alt="image"></p>
+<blockquote>
+<ol>
+<li>评估方法：hold-out（流出法），即训练集S和测试集T是两个互斥集合，S U T=D整体的数据集。</li>
+</ol>
+</blockquote>
+<p><strong> 此处：70%数据用作训练集，30%的数据用于测试集。数据最好是随机的。所以有序的数据最好先打散，再做分割。</strong></p>
+<p>如果对于训练集J的error很低，而对于测试机error很高，我们认为这是overfitting。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-18%20%E4%B8%8B%E5%8D%8810.49.47.png" alt="image"></p>
+<p>使用方法：training dataset计算出的theta代入testing dataset中，linear与logistic regresstion的J中的h(x)不一样。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-18%20%E4%B8%8B%E5%8D%8810.58.41.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-18%20%E4%B8%8B%E5%8D%8811.16.09.png" alt="image"></p>
+<p><strong> Definition of Misclassification error </strong><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-18%20%E4%B8%8B%E5%8D%8811.16.15.png" alt="image"></p>
+<h3 id="Model-Selection-and-Train-Validation-Test-Sets"><a href="#Model-Selection-and-Train-Validation-Test-Sets" class="headerlink" title="Model Selection and Train/Validation/Test Sets"></a>Model Selection and Train/Validation/Test Sets</h3><p><strong> Model Selection Problem </strong><br>比如，如何选择lambda，如何选择特征值等<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-18%20%E4%B8%8B%E5%8D%8811.22.52.png" alt="image"><br>Model Selection时，多项式维度为d，计算对应的d个θ向量。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-18%20%E4%B8%8B%E5%8D%8811.28.01.png" alt="image"></p>
+<blockquote>
+<ol>
+<li>评估方法：Cross Validation交叉验证法，</li>
+</ol>
+</blockquote>
+<p>分成训练集、交叉验证集、训练集，此处比例6：2：2</p>
+<p>使用过程：<br>1） 假设建立d个model，分别在training dataset上求使其training error最小的θ向量，那么得到d个θ向量。</p>
+<p>2）把θ分别代入cross validation dataset上计算J(cv)，选择cv 中error最小的一个模型计算J（test）。</p>
+<p>Tips：通常J（cv）小于J（test）</p>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-18%20%E4%B8%8B%E5%8D%8811.41.12.png" alt="image"><br>上面的只采用训练集、测试集的例子，体现了一个弊端：通过Jtraing计算出的theta代入Jtest，选取最小的Jtest的theta。由于在选取theta过程中考虑了Jtest的数据集（通过Jtest的数据集选的theta），所以可能对于新的数据集generalize效果不够好，因此提出了下面的train、cv、test的评估方式。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-18%20%E4%B8%8B%E5%8D%8811.42.01.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-18%20%E4%B8%8B%E5%8D%8811.44.37.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-18%20%E4%B8%8B%E5%8D%8811.46.29.png" alt="image"></p>
+<h2 id="Bias-vs-Variance"><a href="#Bias-vs-Variance" class="headerlink" title="Bias vs Variance"></a>Bias vs Variance</h2><h3 id="Definition-of-Bias-and-Variance-Problem"><a href="#Definition-of-Bias-and-Variance-Problem" class="headerlink" title="Definition of Bias and Variance Problem"></a>Definition of Bias and Variance Problem</h3><p>随着d维度的增加，整个模型是一个从欠拟合到过拟合的过程，Jtrain一直下降，Jcv是一个下降再上升的过程，Error就产生了bias跟variance的概念。</p>
+<p>underfitting problem-high bias高偏差，与预期期望差别大，偏离程度大<br>overfittiong problem-high variance高方差，同样大小的训练集的变动导致的学习性能变化，即刻画了数据扰动所造成的影响（来自周志华的机器学习的定义）。<br>！！！！！增加定义</p>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-19%20%E4%B8%8B%E5%8D%888.47.25.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-19%20%E4%B8%8B%E5%8D%889.08.51.png" alt="image"><br><strong><em> 如果Jtrain跟Jcv都很高，那么认为是bias（underfitting），如果Jtrain下降而Jcv远远大于Jtrain则认为是variance（overfitting）</em></strong></p>
+<blockquote>
+<p>对于d的增加，我们认为模型是一个从high bias向high variance变化的模型。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-19%20%E4%B8%8B%E5%8D%889.12.25.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-19%20%E4%B8%8B%E5%8D%889.13.40.png" alt="image"></p>
+<h3 id="Regularization-and-bias-variance"><a href="#Regularization-and-bias-variance" class="headerlink" title="Regularization and bias/variance"></a>Regularization and bias/variance</h3><p>Regularization通过大lambda限制小theta以解决overfitting的问题。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-19%20%E4%B8%8B%E5%8D%889.36.09.png" alt="image"><br>Jtrain、Jcv、Jtest的定义。其中J包含regularized part，Jtrain、Jcv、Jtest都不包括。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-19%20%E4%B8%8B%E5%8D%889.37.31.png" alt="image"></p>
+<p>通过try一系列（类似先开始的d维度）的lambda值，通过J计算出theta值，然后代入到Jcv中，选择Jcv小的作为hypothesis，计算Jtest。</p>
+</blockquote>
+<p>比如此处选取12个lambda做尝试。通过J计算theta，发现theta5代入Jcv中效果最好。则认为theta5是选定的lambda。</p>
+<p>再次强调J中增加Regularized part，Jtrain、Jcv、Jtest不加。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-19%20%E4%B8%8B%E5%8D%8810.33.06.png" alt="image"></p>
+<blockquote>
+<p>对于lambda的增加，我们认为J向underfitting转变，因为Jtrain同J的曲线，是一个逐步上升的过程，对于Jcv体现出来小的lambda对应了high variance，大的lambda对应high bias。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-19%20%E4%B8%8B%E5%8D%8811.08.25.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-19%20%E4%B8%8B%E5%8D%8810.50.15.png" alt="image"></p>
+</blockquote>
+<p><strong> 此处的曲线都是理想化的，实际中可能会有很多噪音。</strong> </p>
+<h3 id="Learning-Curve"><a href="#Learning-Curve" class="headerlink" title="Learning Curve"></a>Learning Curve</h3><blockquote>
+<p>面对于bias&amp;variance的dilemma，Learning curve有助于判断bias/variance问题（error-dataset size plot）</p>
+</blockquote>
+<p>数据集小，比如一个sample，曲线可以很好拟合training dataset但是Jcv会比较大；随着size增加，由于拟合难度增加所以Jtrain都会增加，但是Jcv会减低由于曲线会越来越符合dataset。</p>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-19%20%E4%B8%8B%E5%8D%8811.22.44.png" alt="image"><br>对于high bias和high variance的情况，learning curve会有一些特点。</p>
+<p>high bias的情况下，比如h就是一条直线，不管数据集怎么增加作用都不打，Jtrain、Jcv都趋向水平，并有一个high error。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-19%20%E4%B8%8B%E5%8D%8811.32.06.png" alt="image"></p>
+<p>high variance情况下，更多的数据集有助于降低Jcv与Jtrain之间的高gap<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-19%20%E4%B8%8B%E5%8D%8811.36.49.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-19%20%E4%B8%8B%E5%8D%8811.38.39.png" alt="image"></p>
+<p>总结：数据集的增加只对high variance有效果。</p>
+<h3 id="Ideas-behind-Implementation"><a href="#Ideas-behind-Implementation" class="headerlink" title="Ideas behind Implementation"></a>Ideas behind Implementation</h3><p>回到Evaluating a Learning Algorithm中的diagnose部分。之前说到，对于模型不理想，根绝bias/variance问题，提出的一些调整的方向。如果出现high bias问题可以通过增加feature、增加多项式、降低lambda；如果出现high variance问题，可以通过减少feature，增加dataset size、增加lambda达到。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-19%20%E4%B8%8B%E5%8D%8811.54.00.png" alt="image"><br>对于神经网络的问题，左边的图表示underfitting问题（参数少）；右边的图显示overfitting的问题。</p>
+<p>通常的解决办法是多parameter+lambda（控制overfitting的问题）-》代价就是计算比较贵。对于不好确定几个hidden layers的问题，可以通过将数据集分成训练、验证、测试集，并且做过个模型计算（像之前的d维度问题。）<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-19%20%E4%B8%8B%E5%8D%8811.59.39.png" alt="image"><br><img src="/Users/wong/Desktop/屏幕快照 2016-07-20 上午12.11.04.png" alt="image"></p>
+<h1 id="Machine-Learning-System-Design"><a href="#Machine-Learning-System-Design" class="headerlink" title="Machine Learning System Design"></a>Machine Learning System Design</h1><h2 id="Example-Building-a-spam-classifier"><a href="#Example-Building-a-spam-classifier" class="headerlink" title="Example: Building a spam classifier"></a>Example: Building a spam classifier</h2><h3 id="issue-1-prioritizing-what-to-what-to-work-on"><a href="#issue-1-prioritizing-what-to-what-to-work-on" class="headerlink" title="issue 1:prioritizing what to what to work on"></a>issue 1:prioritizing what to what to work on</h3><p>SPAM &amp; NON-SPAM Example</p>
+<p>左测是个spam email，右侧是个non-spam email<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-23%20%E4%B8%8B%E5%8D%8812.52.53.png" alt="image"><br><strong> 如何建模模型 </strong></p>
+<blockquote>
+<p>根据训练集，选择feature，通常选择认为是spam/non-spam的词作为一个feature，每个样本的X表示第i个feature是否出现（1表示出现，0表示没有出现）。虽然此处指选择了100个feature，但是真实中通常词频的排序选择1w-5w个。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-23%20%E4%B8%8B%E5%8D%8812.57.16.png" alt="image"></p>
+</blockquote>
+<p><strong> 如何提高正确率呢？</strong></p>
+<blockquote>
+<p>可以增加样本数，设计复杂的算法，根据header或者body选择一些feature。大部分时间，头脑风暴一些选择，很难说哪个方法是更有效的，随机选择上述的方法或者灵光一现想到一些新的办法。</p>
+</blockquote>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-23%20%E4%B8%8B%E5%8D%881.16.41.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-23%20%E4%B8%8B%E5%8D%881.18.58.png" alt="image"></p>
+<h3 id="issue-2：a-way-to-systematicly-decide-what-to-do-next-Error-Analysis"><a href="#issue-2：a-way-to-systematicly-decide-what-to-do-next-Error-Analysis" class="headerlink" title="issue 2：a way to systematicly decide what to do next-Error Analysis"></a>issue 2：a way to systematicly decide what to do next-Error Analysis</h3><p><strong> 提高正确率的工具 </strong></p>
+<blockquote>
+<p>增加校验数据集，learning curve（看是bias还是variance，增加feature还是增加dataset size还是其他的），error analysis<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-23%20%E4%B8%8B%E5%8D%881.31.48.png" alt="image"></p>
+<p>Error Analysis：手动查看分错的<strong> CV </strong> 集数据，调整分类的feature。e.g.发现一些新的邮件类型，不同类型会不会有一些新的feature？分析可以帮助正确分类的新feature，错误拼写？标点符号？不常见的拼写啊？可以先选择一些容易并且提升效率快的。Error Analysis不会告诉你你的优化是不是有用的，通过实施新条件的对比，可以知道这个新的idea是不是真的有用。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-23%20%E4%B8%8B%E5%8D%881.34.45.png" alt="image"></p>
+</blockquote>
+<p>还有一些问题，只能通过测试看效果差异如何。</p>
+<ol>
+<li>如果discount/discounts算不算一个词呢？我们可以通过stemming software（看词的前几位是不是一致而断定是不是一个词。但是也会带来一些新的问题，e.g.universe和university也可能算作一个词）</li>
+<li>区不区分大小写<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-23%20%E4%B8%8B%E5%8D%881.48.25.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-23%20%E4%B8%8B%E5%8D%881.45.39.png" alt="image"></li>
+</ol>
+<h3 id="issue-3：handling-skewed-data"><a href="#issue-3：handling-skewed-data" class="headerlink" title="issue 3：handling skewed data"></a>issue 3：handling skewed data</h3><p>有的时候，accuracy和error不能准确描述模型的好坏，比如skew class（e.g.癌症）</p>
+<blockquote>
+<p>skewed class: 在二分类中，一种分类的样本数远远大于另一类。</p>
+</blockquote>
+<p>比如对于患癌症的诊断来说，建模的准确率99%，错误率1%。但是实际上只有0.5%的患者有癌症。也就是说，如果所有的病人我们都认为他没有患癌症的话，准确率是99.5%，错误率0.5%，比我们的模型效果看上去还要好！！！<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-23%20%E4%B8%8B%E5%8D%882.16.27.png" alt="image"><br>因此，我们需要引入error matrices。根绝实际情况（1 postive/0 negative）跟预测情况(1/0)，我们把训练结果分成四中情况True positive（真正类）、False positive（假正类）、True negative（真负类）、False negative（假负类）。</p>
+<p><strong> 考虑两种情况 </strong></p>
+<blockquote>
+<ol>
+<li>诊断错了的误报，即模型预测得了癌症实际上并没有得（FP）。通过precision精准率来判定。</li>
+<li>诊断漏了的漏报，即模型预测没有得癌症但是实际上是得了癌症（FN）。通过recall召回率来断定。</li>
+</ol>
+</blockquote>
+<p>通过Precision和recall，我们可以避免skew class上面出现的问题。</p>
+<p>怎么避免呢？假设样本是100，如果我们按照上面的假设所有的病人都没有患病，那么TP=0、FP=0、FN=5、TN=95.Precision=TP/(TP+FP),recall=TP/(TP+FN)=0.</p>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-23%20%E4%B8%8B%E5%8D%882.24.05.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-23%20%E4%B8%8B%E5%8D%882.25.05.png" alt="image"><br>precision=TP/(TP+FP)=80/(80+20)<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-23%20%E4%B8%8B%E5%8D%882.25.39.png" alt="image"><br>recall=TP/(TP+FN)=80/(80+80)</p>
+<p><strong> Precision and Recall trade-off-Evaluation Matrix </strong><br>对于诊断癌症的这个例子</p>
+<ol>
+<li>我们希望在更有把握的情况下预测病人为1（患病），因此我们把h（x）的阈值提高到0.7甚至0.9-&gt;high threshold往往带来一个high precision，low recall</li>
+<li>我们希望尽可能告知患病的情况因为如果有患病而没有告知可能带来一个很大的伤害，因为我们把h（x）的threshold调低，比如到0.3-&gt;low threshold往往伴随着low precision，high recall</li>
+</ol>
+<p>Precision-recall的曲线路径可能是多样的，但基本都是high precision low recall vs low precision high recall。</p>
+<blockquote>
+<p>因此模型就变为我们需要选择一个threshold平衡precision和recall。那么如何选择哪个算法的效果好呢？此处的评价标准：F1-Score。</p>
+</blockquote>
+<p>由于average的方法，可能会由于P/R的高而使得平均值高（比如之前预测所有y=1或者y=0的情况），因此平均的方法不合理。</p>
+<p>F1-score的评价方法：</p>
+<ol>
+<li>如果P/R=0，F=0，避免上文提到的极值带来的影响。</li>
+<li>如果P&amp;R=1，F=1.<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-23%20%E4%B8%8B%E5%8D%884.07.13.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-23%20%E4%B8%8B%E5%8D%884.16.27.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-23%20%E4%B8%8B%E5%8D%884.17.16.png" alt="image"></li>
+</ol>
+<p><strong> 评价标准还有很多，F可能也还有其他的表达方式 比如 （P+R）^1/2</strong></p>
+<h2 id="Using-Large-Data-Sets"><a href="#Using-Large-Data-Sets" class="headerlink" title="Using Large Data Sets"></a>Using Large Data Sets</h2><p>2001年的时候，banko&amp;bill做了一项有趣的研究，他们尝试了很多种算法，其中除了naive bayes外，其他的算法现在都不用了。</p>
+<p><strong> 其中有个共性，所有的算法都有一个趋势：随着数据集变大，准确率是上升的。因此，他们认为数据集的大小更为关键。 </strong><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-23%20%E4%B8%8B%E5%8D%884.41.15.png" alt="image"><br>那么是不是这样的呢？</p>
+<p>答案，不是。反例，预测房价问题，如果仅仅给定房子的面积，能很好预测房价么？确定位置信息、房龄等，不能很好预测。</p>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-23%20%E4%B8%8B%E5%8D%884.43.33.png" alt="image"><br>那么设计原则是什么呢？</p>
+<ol>
+<li>达到low bias：选择尽可能多的足够的features，不管是linear/logistic regression中选择很多parameter还是神经网络中选择更多的hidden units，Jtrain小</li>
+<li>达到low variance：选择大数据集，降低overfit的可能性。因为不管high bias/variance的情况下，大数量集都会使得J(train)≈J(cv)，大的数量集可是解决overfit的问题。Jtest小。</li>
+</ol>
+<p>Recal：</p>
+<ol>
+<li>high bias：Jtrain≈Jcv并且都很大，处于underfit阶段，可以通过多feature，多多项式复杂度，小lambda达到；</li>
+<li>high ariance：J(train)&lt;&lt;J(cv)，Jtrain小但是Jcv大，处于overfit阶段；可以通过大数据集，降低feature，d，大lambda。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-23%20%E4%B8%8B%E5%8D%884.48.55.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-23%20%E4%B8%8B%E5%8D%884.52.04.png" alt="image"></li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Coursera/">Coursera</a><a href="/tags/Andrew-Ng/">Andrew Ng</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://tnxy.github.io/2016/07/24/ML-w6/" data-title="ML-w6 | xiyuのworkspace" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/07/19/ML-w5/"  title="ML-w5">
+ <strong>NEXT:</strong><br/> 
+ <span>ML-w5
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Advice-for-Applying-Machine-Learning"><span class="toc-number">1.</span> <span class="toc-text">Advice for Applying Machine Learning</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Deciding-what-to-try-next"><span class="toc-number">1.0.1.</span> <span class="toc-text">Deciding what to try next</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Evaluating-a-Hypothesis"><span class="toc-number">1.0.2.</span> <span class="toc-text">Evaluating a Hypothesis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Model-Selection-and-Train-Validation-Test-Sets"><span class="toc-number">1.0.3.</span> <span class="toc-text">Model Selection and Train/Validation/Test Sets</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bias-vs-Variance"><span class="toc-number">1.1.</span> <span class="toc-text">Bias vs Variance</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Definition-of-Bias-and-Variance-Problem"><span class="toc-number">1.1.1.</span> <span class="toc-text">Definition of Bias and Variance Problem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Regularization-and-bias-variance"><span class="toc-number">1.1.2.</span> <span class="toc-text">Regularization and bias/variance</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Learning-Curve"><span class="toc-number">1.1.3.</span> <span class="toc-text">Learning Curve</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ideas-behind-Implementation"><span class="toc-number">1.1.4.</span> <span class="toc-text">Ideas behind Implementation</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Machine-Learning-System-Design"><span class="toc-number">2.</span> <span class="toc-text">Machine Learning System Design</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Example-Building-a-spam-classifier"><span class="toc-number">2.1.</span> <span class="toc-text">Example: Building a spam classifier</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#issue-1-prioritizing-what-to-what-to-work-on"><span class="toc-number">2.1.1.</span> <span class="toc-text">issue 1:prioritizing what to what to work on</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#issue-2：a-way-to-systematicly-decide-what-to-do-next-Error-Analysis"><span class="toc-number">2.1.2.</span> <span class="toc-text">issue 2：a way to systematicly decide what to do next-Error Analysis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#issue-3：handling-skewed-data"><span class="toc-number">2.1.3.</span> <span class="toc-text">issue 3：handling skewed data</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Using-Large-Data-Sets"><span class="toc-number">2.2.</span> <span class="toc-text">Using Large Data Sets</span></a></li></ol></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分類</p>
+		<ul>
+		
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>5</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Andrew-Ng/" title="Andrew Ng">Andrew Ng<sup>5</sup></a></li>
+		
+			<li><a href="/tags/Coursera/" title="Coursera">Coursera<sup>5</sup></a></li>
+		
+			<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>5</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		<a href="https://github.com/https://github.com/tnxy" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2016 
+		
+		<a href="http://tnxy.github.io" target="_blank" title="xiyu">xiyu</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>
