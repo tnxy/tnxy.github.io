@@ -39,7 +39,7 @@ y=1时，J的曲线如左图，z远远大于0（即thetaX远远大于0）">
 				<h1 class="site-name"><a href="/" title="xiyuのworkspace">xiyuのworkspace</a></h1>
 				<h2 class="blog-motto"></h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -52,7 +52,7 @@ y=1时，J的曲线如左图，z远远大于0（即thetaX远远大于0）">
 					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:tnxy.github.io">
 					</form>
 					
@@ -76,7 +76,7 @@ y=1时，J的曲线如左图，z远远大于0（即thetaX远远大于0）">
     </p>
   <p class="article-time">
     <time datetime="2016-07-28T14:21:13.000Z" itemprop="datePublished">2016-07-28</time>
-    Updated:<time datetime="2016-07-28T14:23:12.000Z" itemprop="dateModified">2016-07-28</time>
+    更新日期:<time datetime="2016-07-28T14:24:24.000Z" itemprop="dateModified">2016-07-28</time>
     
   </p>
 </header>
@@ -84,7 +84,7 @@ y=1时，J的曲线如左图，z远远大于0（即thetaX远远大于0）">
 		
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
+			<strong class="toc-title">文章目录</strong>
 		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Large-Margin-Classification"><span class="toc-number">1.</span> <span class="toc-text">Large Margin Classification</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Optimization-Objective"><span class="toc-number">1.1.</span> <span class="toc-text">Optimization Objective</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Large-Margin-Intuition"><span class="toc-number">1.2.</span> <span class="toc-text">Large Margin Intuition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mathematics-behind-large-margin-classfication-opt"><span class="toc-number">1.3.</span> <span class="toc-text">Mathematics behind large margin classfication(opt)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kernels"><span class="toc-number">2.</span> <span class="toc-text">kernels</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SVM-in-Practice"><span class="toc-number">3.</span> <span class="toc-text">SVM in Practice</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Logistic-regression-vs-SVM"><span class="toc-number">3.1.</span> <span class="toc-text">Logistic regression vs SVM</span></a></li></ol></li></ol>
 		</div>
 		
@@ -151,8 +151,9 @@ y=1时，J的曲线如左图，z远远大于0（即thetaX远远大于0）">
 <li>l怎么计算呢？<br>如果有m个训练数据，则有m个l。每个l（i）=x（i）。</li>
 </ol>
 <blockquote>
-<p>那么对于每个x，都有f1…fm标记x到每个landmark的相似度。f0=1<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-27%20%E4%B8%8B%E5%8D%888.44.30.png" alt="image"></p>
+<p>那么对于每个x，都有f1…fm标记x到每个landmark的相似度。f0=1</p>
 </blockquote>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-27%20%E4%B8%8B%E5%8D%888.44.30.png" alt="image"></p>
 <p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-27%20%E4%B8%8B%E5%8D%888.50.36.png" alt="image"></p>
 <ol>
 <li>θ怎么计算？<br>根据l的值，每个x都有一个（m+1）*1维的f向量。将θ与f代入J中计算θ的值。</li>
@@ -160,9 +161,14 @@ y=1时，J的曲线如左图，z远远大于0（即thetaX远远大于0）">
 <p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-27%20%E4%B8%8B%E5%8D%889.07.32.png" alt="image"></p>
 <p><strong> 涉及的两大参数C和σ2的影响 </strong><br>&gt;</p>
 <ol>
-<li>C:<br>C=1/λ，所以大C小λ，容易overfit，产生high variance情况；小C大λ，容易underfit，产生high bias情况</li>
-<li>σ2:<br>σ2，x分布散，high bias；小σ2，x分布密，high variance；<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-27%20%E4%B8%8B%E5%8D%889.11.23.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-27%20%E4%B8%8B%E5%8D%889.17.04.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-27%20%E4%B8%8B%E5%8D%889.19.34.png" alt="image"></li>
+<li>C:</li>
 </ol>
+<p>C=1/λ，所以大C小λ，容易overfit，产生high variance情况；小C大λ，容易underfit，产生high bias情况</p>
+<ol>
+<li>σ2:</li>
+</ol>
+<p>σ2，x分布散，high bias；小σ2，x分布密，high variance；</p>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-27%20%E4%B8%8B%E5%8D%889.11.23.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-27%20%E4%B8%8B%E5%8D%889.17.04.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-27%20%E4%B8%8B%E5%8D%889.19.34.png" alt="image"></p>
 <h1 id="SVM-in-Practice"><a href="#SVM-in-Practice" class="headerlink" title="SVM in Practice"></a>SVM in Practice</h1><p>SVM分为</p>
 <ol>
 <li>No kernel（linear kernel）</li>
@@ -233,20 +239,20 @@ y=1时，J的曲线如左图，z远远大于0（即thetaX远远大于0）">
 </section>
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
+  <strong class="toc-title">文章目录</strong>
   <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Large-Margin-Classification"><span class="toc-number">1.</span> <span class="toc-text">Large Margin Classification</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Optimization-Objective"><span class="toc-number">1.1.</span> <span class="toc-text">Optimization Objective</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Large-Margin-Intuition"><span class="toc-number">1.2.</span> <span class="toc-text">Large Margin Intuition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mathematics-behind-large-margin-classfication-opt"><span class="toc-number">1.3.</span> <span class="toc-text">Mathematics behind large margin classfication(opt)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kernels"><span class="toc-number">2.</span> <span class="toc-text">kernels</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SVM-in-Practice"><span class="toc-number">3.</span> <span class="toc-text">SVM in Practice</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Logistic-regression-vs-SVM"><span class="toc-number">3.1.</span> <span class="toc-text">Logistic regression vs SVM</span></a></li></ol></li></ol>
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
 <div class="categorieslist">
-	<p class="asidetitle">Categories</p>
+	<p class="asidetitle">分类</p>
 		<ul>
 		
 			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>6</sup></a></li>
@@ -257,7 +263,7 @@ y=1时，J的曲线如左图，z远远大于0（即thetaX远远大于0）">
 
   
 <div class="tagslist">
-	<p class="asidetitle">Tags</p>
+	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
 			<li><a href="/tags/Andrew-Ng/" title="Andrew Ng">Andrew Ng<sup>6</sup></a></li>
@@ -271,7 +277,7 @@ y=1时，J的曲线如左图，z远远大于0（即thetaX远远大于0）">
 
 
   <div class="rsspart">
-	<a href="null" target="_blank" title="rss">RSS</a>
+	<a href="null" target="_blank" title="rss">RSS 订阅</a>
 </div>
 
 </aside>
