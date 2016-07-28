@@ -1,0 +1,429 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>ML-w7 | xiyuのworkspace</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="xiyu">
+    
+    <meta name="description" content="机器学习课程笔记系列 I —— Andrew Ng w7 SVM http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-25%20%E4%B8%8B%E5%8D%8810.48.00.png
+L">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="xiyuのworkspace" title="xiyuのworkspace"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="xiyuのworkspace">xiyuのworkspace</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:tnxy.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/07/28/ML-w7/" title="ML-w7" itemprop="url">ML-w7</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://tnxy.github.io" title="xiyu">xiyu</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2016-07-28T14:21:13.000Z" itemprop="datePublished">2016-07-28</time>
+    更新日期:<time datetime="2016-07-28T14:21:46.000Z" itemprop="dateModified">2016-07-28</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Large-Margin-Classification"><span class="toc-number">1.</span> <span class="toc-text">Large Margin Classification</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Optimization-Objective"><span class="toc-number">1.1.</span> <span class="toc-text">Optimization Objective</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Large-Margin-Intuition"><span class="toc-number">1.2.</span> <span class="toc-text">Large Margin Intuition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mathematics-behind-large-margin-classfication-opt"><span class="toc-number">1.3.</span> <span class="toc-text">Mathematics behind large margin classfication(opt)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kernels"><span class="toc-number">2.</span> <span class="toc-text">kernels</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SVM-in-Practice"><span class="toc-number">3.</span> <span class="toc-text">SVM in Practice</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Logistic-regression-vs-SVM"><span class="toc-number">3.1.</span> <span class="toc-text">Logistic regression vs SVM</span></a></li></ol></li></ol>
+		</div>
+		
+		<p> <strong><em> 机器学习课程笔记系列 I —— Andrew Ng w7 SVM </em></strong><br><a href="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-25%20%E4%B8%8B%E5%8D%8810.48.00.png" target="_blank" rel="external">http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-25%20%E4%B8%8B%E5%8D%8810.48.00.png</a></p>
+<h1 id="Large-Margin-Classification"><a href="#Large-Margin-Classification" class="headerlink" title="Large Margin Classification"></a>Large Margin Classification</h1><h2 id="Optimization-Objective"><a href="#Optimization-Objective" class="headerlink" title="Optimization Objective"></a>Optimization Objective</h2><p>回顾logistic regression跟sigmoid函数，</p>
+<ol>
+<li>y=1时，J的曲线如左图，z远远大于0（即thetaX远远大于0），J越小即z对J的影响越不显著。我们需要寻找一个新的曲线（图紫色），e.g.从1开始，右边是水平的，左边是个近似的直线标记为cost1（z）</li>
+<li>y=0时，J的曲线如右图，随着z的减小，h(x)逐步逼近0，J逐渐减小。寻找一个类似的紫色曲线，z=-1点的左边是水平的，右边是近似曲线，标记为cost0（z）<br>根据y=1/0时，J-z曲线，希望找到一个cost1（z）跟cost2（z）的新曲线代替。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-28%20%E4%B8%8B%E5%8D%888.49.58.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-25%20%E4%B8%8B%E5%8D%889.11.42.png" alt="image"></li>
+</ol>
+<p>因此，</p>
+<p>1）J中的log（h（x））用新的cost1、cost0代替，并且</p>
+<p>2）1/m是个常量，不影响theta的最优化及J的变化趋势，所以去掉1/m；</p>
+<p>3）如果把J拆分为unregularized跟Regularized part，J=A+lambda<em>B =&gt; J=CA+B<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-25%20%E4%B8%8B%E5%8D%889.39.53.png" alt="image"><br><em>* Definition of SVM hypothesis </em></em><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-25%20%E4%B8%8B%E5%8D%889.40.40.png" alt="image"></p>
+<h2 id="Large-Margin-Intuition"><a href="#Large-Margin-Intuition" class="headerlink" title="Large Margin Intuition"></a>Large Margin Intuition</h2><p><strong> 按照SVM的定义，不再是根据z的0点给y分类的，z从0点变成了1/-1 </strong><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-25%20%E4%B8%8B%E5%8D%8810.36.36.png" alt="image"><br>假设C取值很大，比如C=1000，000。</p>
+<p>如果C很大，unregularized part尽量趋向于0，也就是说，如果y=1，z=theta<em>X&gt;=1;如果y=0，z=theta</em>X&lt;=-1<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-25%20%E4%B8%8B%E5%8D%8810.43.50.png" alt="image"><br>因此模型就变为了最小化theta^2的平方和<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-25%20%E4%B8%8B%E5%8D%8810.45.18.png" alt="image"></p>
+<p>尽管三种颜色的线都可以作为分类器，可是黑色的表现最好，因为它到每个分类的最短距离更大，这个最低距离叫做margin。</p>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-25%20%E4%B8%8B%E5%8D%8810.49.34.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-25%20%E4%B8%8B%E5%8D%8810.56.50.png" alt="image"></p>
+<blockquote>
+<p>SVM希望通过C平衡错误率跟margin的大小，希望选择一个大C（C=1/lamnda）来达到一个相对大的margin，使得分类尽量的分开。因此SVM又叫做large margin classifier。由此可见：</p>
+</blockquote>
+<ol>
+<li><p>在大C情况下，下图的黑线更能满足large margin。但是随着增加一个左下角的红x点，decision bountary变为了紫色的。也就是说C很大时，large margin很容易受到异常点的影响。</p>
+</li>
+<li><p>如果是在C不那么大的情况下，增加的这个异常点可能并不影响large margin曲线，还是保持黑色的。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-25%20%E4%B8%8B%E5%8D%8811.00.06.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-25%20%E4%B8%8B%E5%8D%8810.57.41.png" alt="image"></p>
+</li>
+</ol>
+<h2 id="Mathematics-behind-large-margin-classfication-opt"><a href="#Mathematics-behind-large-margin-classfication-opt" class="headerlink" title="Mathematics behind large margin classfication(opt)"></a>Mathematics behind large margin classfication(opt)</h2><p>先回顾下向量的内积、假设u、v是两个二维向量，u‘v=v’u=||u|| <em> ||v|| </em> cos=pu <em> ||u||=pv </em> ||v||<br>pu:是v在u向量上的投影；pv是v在u上的投影。p是有方向的，同向正，反向负。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-25%20%E4%B8%8B%E5%8D%8811.32.10.png" alt="image"><br>因此，在svm假设的C很大的情况下，J=min 1/2 sigma θi^2。</p>
+<p>简化问题，假设theta0=0，并且x只有x1、x2.</p>
+<p>那么J=1/2×||θ||^2，theta<em>X-&gt;p </em> ||θ||并且  p <em> ||θ||&gt;=1时y=1；p </em> ||θ||=-1时y=0</p>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-26%20%E4%B8%8B%E5%8D%889.18.56.png" alt="image"><br>下面的左图中，加入SVM采用绿线为decision boundary ，那么蓝色的是theta向量（与boundary呈90°。why？？？假设绿色的线x2=-1/2 <em> x1，x1 +2 </em> x2=0，θ1=1，θ2=2）。那么为了保证红x样本是正类，蓝圈样本是负数，由于x在θ向量上的投影很小，需要θ很大。</p>
+<p>同理如果decision boundary采用右边的图中所示，x在θ向量上的投影大些，θ向量可以小些。根据J的条件，显然右边的更合理。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-26%20%E4%B8%8B%E5%8D%889.48.51.jpg" alt="image"></p>
+<p>如果θ0！=0的话，那么decision boundary不通过原点，可能为最右侧的图<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-26%20%E4%B8%8B%E5%8D%889.49.55.png" alt="image"></p>
+<p>此题，x1=0是decision boundary。所以p最小是2/-2<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-26%20%E4%B8%8B%E5%8D%889.51.49.png" alt="image"></p>
+<h1 id="kernels"><a href="#kernels" class="headerlink" title="kernels"></a>kernels</h1><p>主要分</p>
+<ol>
+<li>No Kernel, hθ(x)=g(θ0x0+θ1x1+…+θnxn)，predict y=1 if θTx&gt;=0;</li>
+<li>Kernel(e.g.Gaussian Kernel),hθ(x)=g(θ0f0+θ1f1+…+θnfn),f=sim(x,l),predict y=1 if θTf&gt;=0;</li>
+</ol>
+<p>对于非线性的，logistic regression用多项式进行拟合。</p>
+<p>现在通过换元法，将x映射到f。则hypotheis变为：hθ(x)=g(θ0f0+θ1f1+…+θnfn)，其中fn为x的幂次项组合。当θf（即θ0f0+θ1f1+…+θnfn）&gt;=0时hθ(x)=1；else hθ(x)=0；<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-26%20%E4%B8%8B%E5%8D%8811.22.24.png" alt="image"><br>有没有更好的f的选择呢？</p>
+<p>通过新的函数，将x映射到f。引入一个新的参数l，通过f=similarity（x，l）来计算原始x与landmark的相似度。</p>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-26%20%E4%B8%8B%E5%8D%8811.32.59.png" alt="image"><br>Gaussian Kernel：此处的函数是个高斯分布。通过Gaussian Kernel，</p>
+<ol>
+<li><p>x与l越相近，f越趋向于1；</p>
+</li>
+<li><p>x与l越相远，f越趋向于0。</p>
+</li>
+</ol>
+<p>因此，f可以充分体现x与l的相似度。</p>
+<p>通过下面这个例子，可以看出来x距离l越远，f越小。并且σ2越大，曲线越smooth也就是说x的分布越散。（可以想象，因为σ2变为原来的一半，那么x也得近似减小一般以得到同样的f值）。</p>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-26%20%E4%B8%8B%E5%8D%8811.35.43.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-26%20%E4%B8%8B%E5%8D%8811.43.10.png" alt="image"></p>
+<p>通过上面的高斯核函数f的引入，对于一个新的x我们如何判断它是哪个类的呢？</p>
+<p>如下图所示，如果得定了θ和l的值，对于一个新的x点。</p>
+<ol>
+<li><p>我们先计算x到每个l的相似度，计算结果为f。</p>
+</li>
+<li><p>根据hypothesis，计算θf的值，如果大于0，属于y=1正类，否则属于y=0的负类。</p>
+</li>
+<li>how to compute θ &amp; l， this is in the next part。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-26%20%E4%B8%8B%E5%8D%8811.50.06.png" alt="image"></li>
+</ol>
+<p>下面这个问题是考σ2与图形变化的关系，注意σ2的大小并不会对f的最大最小值造成影响。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-26%20%E4%B8%8B%E5%8D%8811.46.18.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-27%20%E4%B8%8B%E5%8D%8810.35.11.png" alt="image"></p>
+<p>part 2.<br>继续上面的两个小问题。</p>
+<ol>
+<li>l怎么计算呢？<br>如果有m个训练数据，则有m个l。每个l（i）=x（i）。</li>
+</ol>
+<blockquote>
+<p>那么对于每个x，都有f1…fm标记x到每个landmark的相似度。f0=1<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-27%20%E4%B8%8B%E5%8D%888.44.30.png" alt="image"></p>
+</blockquote>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-27%20%E4%B8%8B%E5%8D%888.50.36.png" alt="image"></p>
+<ol>
+<li>θ怎么计算？<br>根据l的值，每个x都有一个（m+1）*1维的f向量。将θ与f代入J中计算θ的值。</li>
+</ol>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-27%20%E4%B8%8B%E5%8D%889.07.32.png" alt="image"></p>
+<p><strong> 涉及的两大参数C和σ2的影响 </strong><br>&gt;</p>
+<ol>
+<li>C:<br>C=1/λ，所以大C小λ，容易overfit，产生high variance情况；小C大λ，容易underfit，产生high bias情况</li>
+<li>σ2:<br>σ2，x分布散，high bias；小σ2，x分布密，high variance；<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-27%20%E4%B8%8B%E5%8D%889.11.23.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-27%20%E4%B8%8B%E5%8D%889.17.04.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-27%20%E4%B8%8B%E5%8D%889.19.34.png" alt="image"></li>
+</ol>
+<h1 id="SVM-in-Practice"><a href="#SVM-in-Practice" class="headerlink" title="SVM in Practice"></a>SVM in Practice</h1><p>SVM分为</p>
+<ol>
+<li>No kernel（linear kernel）</li>
+<li>kernel function（e.g.之前的高斯分布函数）</li>
+</ol>
+<p>已经有打包好的函数包可以调用比如libsvm，但是需要specify 参数C已经kenerl的选择，是linear还是高斯还是其他。</p>
+<p>可以看出SVM with no kernel与linear regression很相似。尤其适用于维度大但是样本少的情况，计算量小。</p>
+<p>如果是使用高斯内核，需要有很多的样本量，并且维度不大，（要不运算量太大）。但是需要选择σ2。</p>
+<p><strong> 此处要注意，normalization需要在f计算之前就做好！！！ </strong><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-27%20%E4%B8%8B%E5%8D%8810.45.21.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-27%20%E4%B8%8B%E5%8D%8810.49.38.png" alt="image"></p>
+<p>kernel的其他选择：</p>
+<p>polynomial kernel、string kernel、chi-square kernel、histogram intersection kernel<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-27%20%E4%B8%8B%E5%8D%8811.06.27.png" alt="image"><br>跟之前的介绍一样，对于多分类的SVM问题，可以采用one vs all的方法。对于每一个划分，得到一个theta向量。<br>最后对于新的x，代入不同的thetax或者thetaf计算。取最大的一个，作为它的对应分类。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-27%20%E4%B8%8B%E5%8D%8811.16.19.png" alt="image"></p>
+<h2 id="Logistic-regression-vs-SVM"><a href="#Logistic-regression-vs-SVM" class="headerlink" title="Logistic regression vs SVM"></a>Logistic regression vs SVM</h2><p>SVM是个convex函数，计算出的是Global optimum。</p>
+<ol>
+<li><p>如果Feature的数量很大，跟样本数量差不多，这时候选用LR或者是Linear Kernel的SVM</p>
+</li>
+<li><p>如果Feature的数量比较小，样本数量一般，不算大也不算小，选用SVM+Gaussian Kernel</p>
+</li>
+<li><p>如果Feature的数量比较小，而样本数量很多，需要手工添加一些feature变成第一种情况。</p>
+</li>
+</ol>
+<blockquote>
+<p>相同点：Linear SVM和LR都是线性分类器,svm采用的是hinge loss,LR采用的是logistical loss.这两个损失函数的目的都是增加对分类影响较大的数据点的权重，减少与分类关系较小的数据点的权重。</p>
+<p>不同点：Linear SVM不直接依赖数据分布，增加一些数据点可能并不影响分类平面；LR则受所有数据点的影响，如果数据不同类别strongly unbalance一般需要先对数据做balancing。<a href="http://www.iliuye.com/index.php/Wap/Index/article/id/190886" target="_blank" rel="external">参考</a><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-27%20%E4%B8%8B%E5%8D%8811.23.09.png" alt="image"></p>
+</blockquote>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-27%20%E4%B8%8B%E5%8D%8811.14.30.png" alt="image"></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Coursera/">Coursera</a><a href="/tags/Andrew-Ng/">Andrew Ng</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://tnxy.github.io/2016/07/28/ML-w7/" data-title="ML-w7 | xiyuのworkspace" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/07/24/ML-w6/"  title="ML-w6">
+ <strong>NEXT:</strong><br/> 
+ <span>ML-w6
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Large-Margin-Classification"><span class="toc-number">1.</span> <span class="toc-text">Large Margin Classification</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Optimization-Objective"><span class="toc-number">1.1.</span> <span class="toc-text">Optimization Objective</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Large-Margin-Intuition"><span class="toc-number">1.2.</span> <span class="toc-text">Large Margin Intuition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mathematics-behind-large-margin-classfication-opt"><span class="toc-number">1.3.</span> <span class="toc-text">Mathematics behind large margin classfication(opt)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kernels"><span class="toc-number">2.</span> <span class="toc-text">kernels</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SVM-in-Practice"><span class="toc-number">3.</span> <span class="toc-text">SVM in Practice</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Logistic-regression-vs-SVM"><span class="toc-number">3.1.</span> <span class="toc-text">Logistic regression vs SVM</span></a></li></ol></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>6</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Andrew-Ng/" title="Andrew Ng">Andrew Ng<sup>6</sup></a></li>
+		
+			<li><a href="/tags/Coursera/" title="Coursera">Coursera<sup>6</sup></a></li>
+		
+			<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>6</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		<a href="https://github.com/https://github.com/tnxy" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2016 
+		
+		<a href="http://tnxy.github.io" target="_blank" title="xiyu">xiyu</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>
