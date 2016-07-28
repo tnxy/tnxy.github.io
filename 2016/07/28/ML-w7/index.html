@@ -39,7 +39,7 @@ y=1时，J的曲线如左图，z远远大于0（即thetaX远远大于0）">
 				<h1 class="site-name"><a href="/" title="xiyuのworkspace">xiyuのworkspace</a></h1>
 				<h2 class="blog-motto"></h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -52,7 +52,7 @@ y=1时，J的曲线如左图，z远远大于0（即thetaX远远大于0）">
 					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:tnxy.github.io">
 					</form>
 					
@@ -76,7 +76,7 @@ y=1时，J的曲线如左图，z远远大于0（即thetaX远远大于0）">
     </p>
   <p class="article-time">
     <time datetime="2016-07-28T14:21:13.000Z" itemprop="datePublished">2016-07-28</time>
-    更新日期:<time datetime="2016-07-28T14:24:24.000Z" itemprop="dateModified">2016-07-28</time>
+    Updated:<time datetime="2016-07-28T14:27:31.000Z" itemprop="dateModified">2016-07-28</time>
     
   </p>
 </header>
@@ -84,7 +84,7 @@ y=1时，J的曲线如左图，z远远大于0（即thetaX远远大于0）">
 		
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
+			<strong class="toc-title">Contents</strong>
 		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Large-Margin-Classification"><span class="toc-number">1.</span> <span class="toc-text">Large Margin Classification</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Optimization-Objective"><span class="toc-number">1.1.</span> <span class="toc-text">Optimization Objective</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Large-Margin-Intuition"><span class="toc-number">1.2.</span> <span class="toc-text">Large Margin Intuition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mathematics-behind-large-margin-classfication-opt"><span class="toc-number">1.3.</span> <span class="toc-text">Mathematics behind large margin classfication(opt)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kernels"><span class="toc-number">2.</span> <span class="toc-text">kernels</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SVM-in-Practice"><span class="toc-number">3.</span> <span class="toc-text">SVM in Practice</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Logistic-regression-vs-SVM"><span class="toc-number">3.1.</span> <span class="toc-text">Logistic regression vs SVM</span></a></li></ol></li></ol>
 		</div>
 		
@@ -92,7 +92,7 @@ y=1时，J的曲线如左图，z远远大于0（即thetaX远远大于0）">
 <h1 id="Large-Margin-Classification"><a href="#Large-Margin-Classification" class="headerlink" title="Large Margin Classification"></a>Large Margin Classification</h1><h2 id="Optimization-Objective"><a href="#Optimization-Objective" class="headerlink" title="Optimization Objective"></a>Optimization Objective</h2><p>回顾logistic regression跟sigmoid函数，</p>
 <ol>
 <li>y=1时，J的曲线如左图，z远远大于0（即thetaX远远大于0），J越小即z对J的影响越不显著。我们需要寻找一个新的曲线（图紫色），e.g.从1开始，右边是水平的，左边是个近似的直线标记为cost1（z）</li>
-<li>y=0时，J的曲线如右图，随着z的减小，h(x)逐步逼近0，J逐渐减小。寻找一个类似的紫色曲线，z=-1点的左边是水平的，右边是近似曲线，标记为cost0（z）<br>根据y=1/0时，J-z曲线，希望找到一个cost1（z）跟cost2（z）的新曲线代替。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-28%20%E4%B8%8B%E5%8D%888.49.58.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-25%20%E4%B8%8B%E5%8D%889.11.42.png" alt="image"></li>
+<li>y=0时，J的曲线如右图，随着z的减小，h(x)逐步逼近0，J逐渐减小。寻找一个类似的紫色曲线，z=-1点的左边是水平的，右边是近似曲线，标记为cost0（z）<br>根据y=1/0时，J-z曲线，希望找到一个cost1（z）跟cost2（z）的新曲线代替。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-25%20%E4%B8%8B%E5%8D%888.49.58.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-07-25%20%E4%B8%8B%E5%8D%889.11.42.png" alt="image"></li>
 </ol>
 <p>因此，</p>
 <p>1）J中的log（h（x））用新的cost1、cost0代替，并且</p>
@@ -239,20 +239,20 @@ y=1时，J的曲线如左图，z远远大于0（即thetaX远远大于0）">
 </section>
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目录</strong>
+  <strong class="toc-title">Contents</strong>
   <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Large-Margin-Classification"><span class="toc-number">1.</span> <span class="toc-text">Large Margin Classification</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Optimization-Objective"><span class="toc-number">1.1.</span> <span class="toc-text">Optimization Objective</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Large-Margin-Intuition"><span class="toc-number">1.2.</span> <span class="toc-text">Large Margin Intuition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mathematics-behind-large-margin-classfication-opt"><span class="toc-number">1.3.</span> <span class="toc-text">Mathematics behind large margin classfication(opt)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kernels"><span class="toc-number">2.</span> <span class="toc-text">kernels</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SVM-in-Practice"><span class="toc-number">3.</span> <span class="toc-text">SVM in Practice</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Logistic-regression-vs-SVM"><span class="toc-number">3.1.</span> <span class="toc-text">Logistic regression vs SVM</span></a></li></ol></li></ol>
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分类</p>
+	<p class="asidetitle">Categories</p>
 		<ul>
 		
 			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>6</sup></a></li>
@@ -263,7 +263,7 @@ y=1时，J的曲线如左图，z远远大于0（即thetaX远远大于0）">
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			<li><a href="/tags/Andrew-Ng/" title="Andrew Ng">Andrew Ng<sup>6</sup></a></li>
@@ -277,7 +277,7 @@ y=1时，J的曲线如左图，z远远大于0（即thetaX远远大于0）">
 
 
   <div class="rsspart">
-	<a href="null" target="_blank" title="rss">RSS 订阅</a>
+	<a href="null" target="_blank" title="rss">RSS</a>
 </div>
 
 </aside>
