@@ -1,0 +1,660 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>python_c1.md | xiyuのworkspace</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="xiyu">
+    
+    <meta name="description" content="python 数据分析（一）
+基础语法开发环境：
+
+spyder
+terminal
+pycharm
+ipytnon notebook
+
+基本数据类型：
+浮点型
+整形
+布尔型
+空值
+字符串 ‘xxx ‘或者 “xxx”习惯 大写是常量，但是其实python中没有特定意义上的常量
+
+数据结构类型：下标从">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="xiyuのworkspace" title="xiyuのworkspace"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="xiyuのworkspace">xiyuのworkspace</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:tnxy.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/07/31/python-c1-md/" title="python_c1.md" itemprop="url">python_c1.md</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://tnxy.github.io" title="xiyu">xiyu</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2016-07-31T13:25:59.000Z" itemprop="datePublished">2016-07-31</time>
+    Updated:<time datetime="2016-07-31T13:31:48.000Z" itemprop="dateModified">2016-07-31</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#基础语法"><span class="toc-number">1.</span> <span class="toc-text">基础语法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本数据类型："><span class="toc-number">1.1.</span> <span class="toc-text">基本数据类型：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据结构类型："><span class="toc-number">1.2.</span> <span class="toc-text">数据结构类型：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#控制语句"><span class="toc-number">1.3.</span> <span class="toc-text">控制语句</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#循环语句"><span class="toc-number">1.4.</span> <span class="toc-text">循环语句</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数定义"><span class="toc-number">1.5.</span> <span class="toc-text">函数定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#高阶函数"><span class="toc-number">1.6.</span> <span class="toc-text">高阶函数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#高级进阶-pandas-numpy-series"><span class="toc-number">2.</span> <span class="toc-text">高级进阶-pandas numpy series</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#创建对象"><span class="toc-number">2.1.</span> <span class="toc-text">创建对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查看数据集的情况"><span class="toc-number">2.2.</span> <span class="toc-text">查看数据集的情况</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#筛选、处理数据集"><span class="toc-number">2.3.</span> <span class="toc-text">筛选、处理数据集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#多重索引的使用：作用加快搜索"><span class="toc-number">2.3.1.</span> <span class="toc-text">多重索引的使用：作用加快搜索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分组计算"><span class="toc-number">2.3.2.</span> <span class="toc-text">分组计算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#整合数据：concat-merge-join"><span class="toc-number">2.3.3.</span> <span class="toc-text">整合数据：concat merge join</span></a></li></ol></li></ol></li></ol>
+		</div>
+		
+		<p>python 数据分析（一）</p>
+<h1 id="基础语法"><a href="#基础语法" class="headerlink" title="基础语法"></a>基础语法</h1><p>开发环境：</p>
+<ol>
+<li>spyder</li>
+<li>terminal</li>
+<li>pycharm</li>
+<li>ipytnon notebook</li>
+</ol>
+<h2 id="基本数据类型："><a href="#基本数据类型：" class="headerlink" title="基本数据类型："></a>基本数据类型：</h2><ol>
+<li>浮点型</li>
+<li>整形</li>
+<li>布尔型</li>
+<li>空值</li>
+<li>字符串 ‘xxx ‘或者 “xxx”<br>习惯 大写是常量，但是其实python中没有特定意义上的常量</li>
+</ol>
+<h2 id="数据结构类型："><a href="#数据结构类型：" class="headerlink" title="数据结构类型："></a>数据结构类型：</h2><p>下标从0开始，前闭后开区间</p>
+<ol>
+<li>list列表[]：动态的，有序的<br>list([,,]),e.g.[1,2,3,4,5,6,7]<br>x[:5]切片<br>x.append(value),每次只能追加一个元素<br>x.extend(list),追加list<br>x.insert(index,value),在index位置上插入value值<br>x.remove(value),删除某个值<br>x.pop()，弹出尾部的数</li>
+</ol>
+<ol>
+<li>Tuple元组()：静态的，有序的，一旦创建不可修改。<br>tuple([]) e.g. (1,1,1,2,2,2)</li>
+<li><p>Dict字典{}：以key键值来存储数据的，一个key对应一个值。<br>vs List：占用内存，不会由于key的增加而查询变慢<br>e.g. {‘red’:101,’yellow’:244,’blue’:77}<br>dic[‘key’]=value<br>dic.keys()<br>dic.values()<br>dic.items()</p>
+<p> for (k,v) in dic.items():<br> print(k,v)</p>
+</li>
+<li>Set集合：动态无序的，元素不能重复。</li>
+</ol>
+<h2 id="控制语句"><a href="#控制语句" class="headerlink" title="控制语句"></a>控制语句</h2><p>1.</p>
+<pre><code>if condition1：
+    state1
+elif condition2：
+    state2
+    。。。
+else：
+    state
+</code></pre><h2 id="循环语句"><a href="#循环语句" class="headerlink" title="循环语句"></a>循环语句</h2><p>x=list([])</p>
+<pre><code>for x in str:
+    print(x)
+
+while condition:
+    print()
+</code></pre><p>导入包</p>
+<pre><code>import math 
+import pandas ad pd
+</code></pre><h2 id="函数定义"><a href="#函数定义" class="headerlink" title="函数定义"></a>函数定义</h2><pre><code>def functionName(parameters):
+    定义
+return 返回变量
+</code></pre><p>tips:py3中，默认的参数值，只能写在最后</p>
+<p>e.g</p>
+<pre><code>def threeNumAdd(x,y,z = 98):
+
+    numSum = x + y + z 
+
+return numSum
+</code></pre><p>non-default argument follows default argument</p>
+<p>tab键 自动补全。</p>
+<h2 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h2><ol>
+<li>map :将函数一次作用到序列的每个元素。iterator=map(function,iterable)</li>
+<li>reduce:传入的函数需要有两个参数，把结果继续和序列的下一个元素做累积计算。map(function,iterable)</li>
+</ol>
+<p>效果是reduce(f, [x1, x2, x3, x4]) = f(f(f(x1, x2), x3), x4)</p>
+<p>py3中，需要导入进来 from functools import reduce    </p>
+<ol>
+<li>filter：类似map，一个函数，一个序列，但是返回值是true/false决定是否保留元素。根据函数返回的true/false返回元素的。</li>
+</ol>
+<h1 id="高级进阶-pandas-numpy-series"><a href="#高级进阶-pandas-numpy-series" class="headerlink" title="高级进阶-pandas numpy series"></a>高级进阶-pandas numpy series</h1><p>pd.Series<br>pd.Dataframework</p>
+<h2 id="创建对象"><a href="#创建对象" class="headerlink" title="创建对象"></a>创建对象</h2><p><strong> 1. array-like(index同data的长度一致，np.xxx,list), dict, or scalar value（like 5）创建Series(like vector,1-column table)对象 </strong></p>
+<p>exampe:</p>
+<p> 1) list-&gt;Series</p>
+<pre><code>#if index parameter is missing, the default index is 0,1,...
+alist=list([1,2,3,4,5])
+pd.Series(alist)
+pd.Series(alist,index=list(&quot;ABCDE&quot;)) #list(&quot;ABCDE&quot;)是string转list
+</code></pre><p><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午3.50.04.png" alt="image"></p>
+<p> 2) dict-&gt;Series</p>
+<pre><code>#dict的key作为Series的index
+bdir={&quot;name&quot;:&quot;小明&quot;,&quot;age&quot;:18,&quot;height&quot;:180}
+s1=pd.Serires(bdir)
+
+
+bdir1={&quot;name&quot;:&quot;小明&quot;,&quot;age&quot;:[18,29],&quot;height&quot;:180}
+s2=pd.Serires(bdir1)
+</code></pre><p><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午3.31.38.png" alt="image"></p>
+<p> 3） a ndarray-&gt;Series</p>
+<pre><code>pd.Series(np.random.rand(10),index=list(&quot;ABCDEFGHIJ&quot;))
+</code></pre><p> <img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午4.10.09.png" alt="image"></p>
+<p>4) Scalar value -&gt;Series</p>
+<pre><code>pd.Series(5,index=list(&quot;123&quot;))
+</code></pre><p>  <img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午4.10.17.png" alt="image"></p>
+<blockquote>
+<p>Series特点：<br>1.ndarray-like，可以进行很多np的运算，比如，s=pd.Series(alist)，s[s&gt;s.median()]<br>2.dict-like,可以通过index查询/修改value&gt; ，s[‘0’]<br>3.还可以做vetor的运算，比如s*2，s+s</p>
+</blockquote>
+<p><strong> 2.dict，2D ndarray，Series，DF 创建dataframe</strong></p>
+<p>1）dict创建dataframe(like matrix,sql table)：<strong> 注意与创建series不同，key默认作为column名字而不是index的名字 </strong></p>
+<ul>
+<li><p>pd.DataFrame(data,index,column)  </p>
+<p>example:</p>
+<p>  #dict of Series<br>  d = {‘one’ : pd.Series([1., 2., 3.], index=[‘a’, ‘b’, ‘c’]),’two’ : pd.Series([1., 2., 3., 4.], index=[‘a’, ‘b’, ‘c’, ‘d’])}<br>  s=pd.DataFrame(d)</p>
+<p>  #dict of list/ndarray<br>  bdir={“name”:”小明”,”age”:18,”height”:180}<br>  pd.DataFrame(bdir,index=[0,1,2]) #scalar value必须写明index</p>
+<p>  d = {‘one’ : [1., 2., 3., 4.],’two’ : [4., 3., 2., 1.]}<br>  pd.DataFrame(d)</p>
+</li>
+</ul>
+<p><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午4.29.52.png" alt="image"></p>
+<ul>
+<li><p>pd.DataFrame.from_dict(bdir,orient=”column”)</p>
+<p>example:</p>
+<p>  #如果依然希望dict的key作为index，而不是column的话，pd.DataFrame.from_dict调整orient的参数<br>  df2=pd.DataFrame.from_dict(bdir,orient=”index”)<br><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午4.36.50.png" alt="image"></p>
+</li>
+</ul>
+<p>2) csv文件导入创建dataframe：pd.read_csv(filepath)</p>
+<p><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午4.45.29.png" alt="image">   </p>
+<h2 id="查看数据集的情况"><a href="#查看数据集的情况" class="headerlink" title="查看数据集的情况"></a>查看数据集的情况</h2><p>导入/创建一个数据集，尤其是dataframe对象后，最先查看数据集的情况。<br>e.g.</p>
+<ol>
+<li>df.head(), df.tail(5),df.index,df.columns,df.values</li>
+</ol>
+<p><strong> 2. df.shape 其中df.shape[0]：行数 df.shape[1]列数 </strong> </p>
+<p><strong> 3. df.describe() 查看每一列的数据情况，比如mean std min max 等 </strong></p>
+<p><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午4.53.49.png" alt="image"></p>
+<h2 id="筛选、处理数据集"><a href="#筛选、处理数据集" class="headerlink" title="筛选、处理数据集"></a>筛选、处理数据集</h2><ol>
+<li><p>传统的 df[[columns]]、df[begin_index:stop+1]<br>e.g 筛选单列/多列</p>
+<p> <code>df[&quot;SEX&quot;], df.SEX, df[[&quot;SEX&quot;,&quot;AGE&quot;]]</code></p>
+</li>
+</ol>
+<p>e.g 筛选前100条:<strong> 切片是前闭后开的 </strong></p>
+<pre><code>df[0:100]，df[:100]
+df[[&quot;SEX&quot;,&quot;AGE&quot;]][:100]
+</code></pre><ol>
+<li>df.loc(索引名称，列名称)/df.iloc（索引位置，列位置）/df.ix<br><strong><em>注意切片的话，都是前闭后开，维度loc的时候，是前后闭合！！！ </em></strong></li>
+</ol>
+<p><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午5.26.25.png" alt="image"><br><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午5.26.46.png" alt="image"></p>
+<p>e.g.loc筛选满足多个条件的数据并只显示其中某几列数据<br><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午5.29.43.png" alt="image"></p>
+<p>3.对列做筛选query</p>
+<pre><code>df.query(&quot;SEX==2 &amp; AGE&gt;=30&quot;) #query只能对columns做筛选，强烈建议用“”，里面可能有字符串的过滤
+#如果需要做index的筛选比如符合条件的前100条，可以加上切片
+df.query(&quot;SEX==2 &amp; AGE&gt;=30&quot;)[:100]
+</code></pre><p>4.新增一列 df[new_column_name]=default_column_value</p>
+<p>也可以在筛选的时候直接复制，那么不满足条件的为NaN</p>
+<p><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午5.30.05.png" alt="image"><br><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午5.30.43.png" alt="image"></p>
+<ol>
+<li>如果需要修改数据集的索引名、列名等通过df.rename()并且不替代原有的df</li>
+</ol>
+<p>example:</p>
+<pre><code>#columns = dict{} index={dict} 原数据集不修改，需要修改的要在inplace修改原数据集的参数
+dfr=df1.rename(columns={&quot;age&quot;:&quot;A&quot;,&quot;height&quot;:&quot;H&quot;,&quot;name&quot;:&quot;N&quot;}) 
+</code></pre><p> <img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午5.08.01.png" alt="image">    </p>
+<ol>
+<li>删除重复值 df1.drop_duplicates()默认保留第一条并且不替代原有的df<br><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午5.10.40.png" alt="image"></li>
+<li>统计元素的类别（每个列别的起始位置）bSeries.unique()</li>
+<li>统计元素的频次（一列中每个类别的频次）bSeries.value_counts()<br><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午5.19.14.png" alt="image"></li>
+</ol>
+<h3 id="多重索引的使用：作用加快搜索"><a href="#多重索引的使用：作用加快搜索" class="headerlink" title="多重索引的使用：作用加快搜索"></a>多重索引的使用：作用加快搜索</h3><ol>
+<li>设置多重索引，df.set_index()</li>
+</ol>
+<p><strong> 用法：set_index(keys, drop=True, append=False, inplace=False, verify_integrity=False) 默认情况下，选择的列会从列表中删除添加到新index中。</strong></p>
+<p><strong> 注意，默认情况下，原有的index会删除，如果需要在原index上添加，需要设置append=True </strong></p>
+<p>exampe:</p>
+<pre><code>df1 = df.set_index([&quot;race&quot;,&quot;sex&quot;])
+#在df1的基础上新增education的index，并且替换原有df1的index
+df1.set_index(&apos;education&apos;,append=True,inplace=True)
+</code></pre><p><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午6.27.46.png" alt="image"></p>
+<p><strong> index有个levels属性 </strong></p>
+<p>len(df1.index.levels)可以看index的levels的个数（index个数）<br><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午7.15.22.png" alt="image"></p>
+<ol>
+<li>在多重索引中筛选数据<br>在多重索引中，通过loc筛选单个索引是ok的，但是多个索引就会报错了。</li>
+</ol>
+<p>df1.loc[“Black”]</p>
+<p>错误：df1.loc[[“Black”,”White”]]</p>
+<p><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午6.30.52.png" alt="image"></p>
+<p>solution：<br>1） 对索引进行排序 df.sort_index()<br>2） 然后就可以用前面介绍的loc啦</p>
+<p>example：<br>（1）排序：</p>
+<pre><code>#默认通过index升序排列，sort_index(axis=0, level=None, ascending=True, inplace=False, kind=&apos;quicksort&apos;, na_position=&apos;last&apos;, sort_remaining=True, by=None)
+#ascending&amp;inplace&amp;level，by可以指定列但是不常用
+df1.sort_index(ascending=False)
+</code></pre><p><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午6.50.20.png" alt="image"></p>
+<pre><code>#指定level，level可是是名称也可以是位置 e.g.按照index education排序
+df1.sort_index(level=&quot;education&quot;)
+</code></pre><p><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午7.17.20.png" alt="image"> </p>
+<p>（2）筛选：</p>
+<ul>
+<li>loc（<em>slice(),\</em>[columns]）</li>
+</ul>
+<p>需求是：black-white的所欲女性数据，slice(“Black”,”White”)。</p>
+<pre><code>#loc(index_name,column_name)单层中可以只写index_name，多层必须要写column_name
+#slice(&quot;Black&quot;,&quot;White&quot;)=&quot;Black&quot;:&quot;White&quot;,之间的所有，不同于[&quot;Black&quot;,&quot;White&quot;]
+df3=df2.loc[(slice(&quot;Black&quot;,&quot;White&quot;),[&apos;Female&apos;]),:]
+
+#slice(None)=all
+df2.loc[(slice(&quot;Black&quot;,&quot;White&quot;),slice(None)),:] #black到white的
+</code></pre><ul>
+<li><p>idx<br>loc[idx[条件],:]:</p>
+<p>idx=pd.IndexSlice<br>df2.loc[idx[:,[‘Female’]],:]</p>
+<p>(3)需要重新设置index：df.reset_index([index_list])<br>需求：重新设置index</p>
+<p> df1.reset_index()</p>
+</li>
+</ul>
+<h3 id="分组计算"><a href="#分组计算" class="headerlink" title="分组计算"></a>分组计算</h3><ol>
+<li>分组 df.groupby([column_list])</li>
+<li>对每个分组做计算再combine在一起展示</li>
+</ol>
+<p>example：</p>
+<p>1）分组：单列，多列，index level分组</p>
+<ul>
+<li><p>需求是对race做分组，并且查看每个组的情况</p>
+<p>单列分组：</p>
+<p>  #对race做分组<br>  grouped = df.groupby(“race”)<br>  grouped.mean()<br>  grouped.describe()<br><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午7.24.32.png" alt="image">    </p>
+</li>
+<li><p>也可以对多个列组合的tuple做分组</p>
+</li>
+</ul>
+<p>e.g.（race，sex）tuple：</p>
+<pre><code>grouped1=df.groupby([&quot;race&quot;,&quot;sex&quot;]) #对race sex分组
+</code></pre><p><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午7.29.39.png" alt="image"><br><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午7.29.48.png" alt="image"></p>
+<ul>
+<li>还可以根据index的level分组</li>
+</ul>
+<p>e.g.index有race跟sex，指定groupby（level=[0]）就是按照race分组，level=[0,1]就是按照race sex分组：</p>
+<pre><code>gpt=df1.groupby(level=[0])
+gpt.describe()
+</code></pre><p><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午8.05.43.png" alt="image"></p>
+<ul>
+<li>2） 如果需要查看某个分组的数据：gourpbydata.get_gourp(group_pair)</li>
+</ul>
+<p>e.g. grouped查看black分组情况，grouped1查看（black，female）分组情况（必须为一个tuple因为定义的时候是一个tuple:</p>
+<pre><code>grouped.get_group(&quot;Black&quot;)
+grouped1.get_group((&quot;Black&quot;,&quot;Female&quot;)) #grouped1是两个index作为分组的，一个元祖做的分组
+</code></pre><ul>
+<li>3）apply np函数</li>
+</ul>
+<p>对每个group同时求多个函数groupbydata.agg([np方法])：</p>
+<pre><code>grouped1.agg([np.sum,np.mean,np.std]) #对group做一些统计计算用agg  
+</code></pre><p>  <img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午7.42.44.png" alt="image"></p>
+<p>对每个group的不同列做不同函数运算groupbydata.agg({column_name：np方法})</p>
+<pre><code>grouped1.agg({&quot;age&quot;:np.mean,&quot;fnlwgt&quot;:np.sum})
+</code></pre><p>  <img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午7.42.50.png" alt="image"></p>
+<p>对每个group的一列进行不同运算，并重命名列名，但是只能对一列做操作！！！</p>
+<pre><code>grouped1[&apos;age&apos;].agg({&quot;求和&quot;:np.sum,&quot;求平均数&quot;:np.mean}) #先指定了列名，然后可以通过dict重新指定列名字 ，只能有某一列！！！
+</code></pre><p>  <img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午7.43.00.png" alt="image"></p>
+<ul>
+<li>4）apply特殊计算，比如一些自定义的groupbydata.transform(自定义函数)</li>
+</ul>
+<p>需求：每个分组做标准化、归一化的计算：</p>
+<pre><code>zscore=lambda s:(s-s.mean())/s.std() #匿名函数，标准化
+grouped1.transform(zscore) #对每个group进行标准化的操作
+
+zscore1= lambda s: (s-s.min())/(s.max()-s.min()) #归一化
+</code></pre><p> <img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午7.47.29.png" alt="image">   </p>
+<ul>
+<li>5）对每个group做特殊的筛选groupbydata.filter(筛选条件)</li>
+</ul>
+<p>需求：每个分组的数量大于100的</p>
+<pre><code>grouped1.filter(lambda s: len(s) &gt;=1000)
+</code></pre><p>需求：每个分组的平均值大于36的</p>
+<pre><code>grouped1.filter(lambda s:s[&apos;age&apos;].mean()&gt;=36)  #对group做条件的筛选
+</code></pre><ul>
+<li>6）遍历group</li>
+</ul>
+<p>每个分组迭代都会返回一个 （key，group）tuple </p>
+<pre><code>for name,group in grouped:
+    print(name)
+    print(len(group))
+</code></pre><h3 id="整合数据：concat-merge-join"><a href="#整合数据：concat-merge-join" class="headerlink" title="整合数据：concat merge join"></a>整合数据：concat merge join</h3><ol>
+<li>concat 合并:pd.concat([dt_list])。默认是逐行合并，index是什么样的就是什么样可能会有index重复啦<br>如果df1-4如图所示<br><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午8.16.55.png" alt="image"></li>
+</ol>
+<p>ignore_index的区别：</p>
+<pre><code>pd.concat([df1,df2,df3,df4],ignore_index=True)
+</code></pre><p><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午8.18.18.png" alt="image"> </p>
+<pre><code>pd.concat([df1,df2,df3,df4])
+df1.append(df2).append(df3).append(df4) #两个等价
+</code></pre><p>需要列合并 调整axis=1</p>
+<pre><code>pd.concat([df1,df2],axis=1)
+</code></pre><p><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午8.26.23.png" alt="image"></p>
+<ol>
+<li>merge，根据列合并.pd.merge(left,right,on=[‘key’],how=’left/right’)</li>
+</ol>
+<p>如果left right表如图所示，</p>
+<p><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午8.32.33.png" alt="image"></p>
+<p>如果是左右两张表根据key1值左连接，suffixes用于确定每个原始表相同列的后缀：</p>
+<pre><code>pd.merge(left,right,on = [&apos;key1&apos;],how = &quot;left&quot;)
+pd.merge(left,right,on = [&apos;key1&apos;],how = &quot;left&quot;,suffixes=(&apos;_left&apos;,&apos;_right&apos;))
+</code></pre><p><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午8.35.38.png" alt="image"></p>
+<p>如果左右两张表的列名不一样，则left_on,right_on代替on</p>
+<pre><code># rename left表的列名,
+left1 = left.rename(columns = {&quot;key1&quot;:&quot;key1_1&quot;,&quot;key2&quot;:&quot;key2_2&quot;})
+# left表的(key1_1,key2_2)等于right表的（&apos;key1&apos;,&quot;key2&quot;）时进行left join
+testdf = pd.merge(left1,right,left_on = [&apos;key1_1&apos;,&apos;key2_2&apos;],right_on =[&apos;key1&apos;,&quot;key2&quot;],how = &quot;left&quot; )
+# NaN填充为0
+testdf.fillna(&quot;0&quot;)
+</code></pre><p><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午8.54.42.png" alt="image"></p>
+<p>如果需要一张表的index跟另一张表的column连接，left_index/right_index = True,right_on/left_on=[key_pair]</p>
+<p>example：<br><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午9.04.04.png" alt="image"></p>
+<pre><code>pd.merge(left_index,right,left_index=True,right_on=[&apos;key1&apos;,&apos;key2&apos;],how=&quot;left&quot;)
+pd.merge(left_index,right,left_index=True,right_on=[&apos;key1&apos;,&apos;key2&apos;],how=&quot;right&quot;)
+pd.merge(left_index,right,left_index=True,right_on=[&apos;key1&apos;,&apos;key2&apos;],how=&quot;inner&quot;)
+pd.merge(left_index,right,left_index=True,right_on=[&apos;key1&apos;,&apos;key2&apos;],how=&quot;outer&quot;)
+
+# 仔细体会left/right/inner/outer区别，
+# left join-&gt;left table的表为准，left有right没有的放最后
+# right join-&gt;right table的表为准，right有left没有的放最后
+# inner join-&gt;left表 right表都有的才会出现
+# outer join-&gt;left join，right join独有的放最后
+</code></pre><p><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午9.04.15.png" alt="image"><br><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午9.04.22.png" alt="image"></p>
+<ol>
+<li>join，只能在<em> index </em> 进行连接 df1.join(df2_index,on=[key])</li>
+</ol>
+<p>1） 其中df2_index的index必须严格跟keypair对的上，也就是说定义的left_index表有key1，key2两个level，所以on=[‘k1’,’k2’]</p>
+<p>2） 默认是以df1.join的df1为准，如果想以df2为准，需要加how=“right”</p>
+<pre><code>rightn.join(left_index,on=[&apos;k1&apos;,&apos;k2&apos;])
+</code></pre><p><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午9.21.31.png" alt="image"></p>
+<p><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午9.21.36.png" alt="image"></p>
+<p><img src="/Users/wong/Desktop/屏幕快照 2016-07-31 下午9.22.42.png" alt="image"></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Python/">Python</a><a href="/tags/Data-Analysis/">Data Analysis</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Data-Analysis/">Data Analysis</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://tnxy.github.io/2016/07/31/python-c1-md/" data-title="python_c1.md | xiyuのworkspace" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/07/28/ML-w7/"  title="ML-w7">
+ <strong>NEXT:</strong><br/> 
+ <span>ML-w7
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#基础语法"><span class="toc-number">1.</span> <span class="toc-text">基础语法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本数据类型："><span class="toc-number">1.1.</span> <span class="toc-text">基本数据类型：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据结构类型："><span class="toc-number">1.2.</span> <span class="toc-text">数据结构类型：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#控制语句"><span class="toc-number">1.3.</span> <span class="toc-text">控制语句</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#循环语句"><span class="toc-number">1.4.</span> <span class="toc-text">循环语句</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数定义"><span class="toc-number">1.5.</span> <span class="toc-text">函数定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#高阶函数"><span class="toc-number">1.6.</span> <span class="toc-text">高阶函数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#高级进阶-pandas-numpy-series"><span class="toc-number">2.</span> <span class="toc-text">高级进阶-pandas numpy series</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#创建对象"><span class="toc-number">2.1.</span> <span class="toc-text">创建对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查看数据集的情况"><span class="toc-number">2.2.</span> <span class="toc-text">查看数据集的情况</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#筛选、处理数据集"><span class="toc-number">2.3.</span> <span class="toc-text">筛选、处理数据集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#多重索引的使用：作用加快搜索"><span class="toc-number">2.3.1.</span> <span class="toc-text">多重索引的使用：作用加快搜索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分组计算"><span class="toc-number">2.3.2.</span> <span class="toc-text">分组计算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#整合数据：concat-merge-join"><span class="toc-number">2.3.3.</span> <span class="toc-text">整合数据：concat merge join</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+			<li><a href="/categories/Data-Analysis/" title="Data Analysis">Data Analysis<sup>1</sup></a></li>
+		
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>5</sup></a></li>
+		
+			<li><a href="/categories/Machine-LearningS/" title="Machine LearningS">Machine LearningS<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Andrew-Ng/" title="Andrew Ng">Andrew Ng<sup>6</sup></a></li>
+		
+			<li><a href="/tags/Coursera/" title="Coursera">Coursera<sup>6</sup></a></li>
+		
+			<li><a href="/tags/Data-Analysis/" title="Data Analysis">Data Analysis<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>6</sup></a></li>
+		
+			<li><a href="/tags/Python/" title="Python">Python<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		<a href="https://github.com/https://github.com/tnxy" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2016 
+		
+		<a href="http://tnxy.github.io" target="_blank" title="xiyu">xiyu</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>
