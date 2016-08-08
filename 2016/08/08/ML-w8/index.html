@@ -1,0 +1,422 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>ML-w8 | xiyuのworkspace</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="xiyu">
+    
+    <meta name="description" content="机器学习课程笔记系列 I —— Andrew Ng w8 Unsuperivsed Learning 
+ClusteringUnsupervised Learning:Introduction监督 vs 非监督学习：
+主要的区别在于：监督的训练集是（x，y）作为输入；非监督不知道y可能是什么，只有x">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="xiyuのworkspace" title="xiyuのworkspace"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="xiyuのworkspace">xiyuのworkspace</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:tnxy.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/08/ML-w8/" title="ML-w8" itemprop="url">ML-w8</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://tnxy.github.io" title="xiyu">xiyu</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2016-08-08T15:46:41.000Z" itemprop="datePublished">2016-08-08</time>
+    更新日期:<time datetime="2016-08-08T15:47:25.000Z" itemprop="dateModified">2016-08-08</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Clustering"><span class="toc-number">1.</span> <span class="toc-text">Clustering</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Unsupervised-Learning-Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Unsupervised Learning:Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#K-Means-Algorithm"><span class="toc-number">1.2.</span> <span class="toc-text">K-Means Algorithm</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Optimization-Objective"><span class="toc-number">1.2.1.</span> <span class="toc-text">Optimization Objective</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#issue1-Random-Initialization"><span class="toc-number">1.2.2.</span> <span class="toc-text">issue1 Random Initialization</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#issue2-Choosing-the-Number-of-Clusters"><span class="toc-number">1.2.3.</span> <span class="toc-text">issue2 Choosing the Number of Clusters</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#dimensionality-reduction"><span class="toc-number">2.</span> <span class="toc-text">dimensionality reduction</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Principal-Component-Analysis"><span class="toc-number">2.1.</span> <span class="toc-text">Principal Component Analysis</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Reconstruction-from-compressed-representation"><span class="toc-number">2.1.1.</span> <span class="toc-text">Reconstruction from compressed representation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#choosing-k"><span class="toc-number">2.1.2.</span> <span class="toc-text">choosing k</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Application"><span class="toc-number">2.2.</span> <span class="toc-text">Application</span></a></li></ol></li></ol>
+		</div>
+		
+		<p> <strong><em> 机器学习课程笔记系列 I —— Andrew Ng w8 Unsuperivsed Learning </em></strong></p>
+<h1 id="Clustering"><a href="#Clustering" class="headerlink" title="Clustering"></a>Clustering</h1><h2 id="Unsupervised-Learning-Introduction"><a href="#Unsupervised-Learning-Introduction" class="headerlink" title="Unsupervised Learning:Introduction"></a>Unsupervised Learning:Introduction</h2><p>监督 vs 非监督学习：</p>
+<p>主要的区别在于：监督的训练集是（x，y）作为输入；非监督不知道y可能是什么，只有x作为输入。</p>
+<p>重要的非监督学习算法:</p>
+<p>1) clustering algorithm</p>
+<p>2) dimensionality reduction</p>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-03%20%E4%B8%8B%E5%8D%8811.54.37.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-03%20%E4%B8%8B%E5%8D%8811.55.36.png" alt="image"></p>
+<p>Clustering可用于 市场划分、社交网分析等场景<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-03%20%E4%B8%8B%E5%8D%8811.57.39.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-03%20%E4%B8%8B%E5%8D%8811.58.25.png" alt="image"></p>
+<h2 id="K-Means-Algorithm"><a href="#K-Means-Algorithm" class="headerlink" title="K-Means Algorithm"></a>K-Means Algorithm</h2><p>主要步骤：</p>
+<p>1）随机选择k个中心点ui…uk（初始化）</p>
+<p>2）对于每个训练集x，选择一个最近的中心点，距离记为ci</p>
+<p>3）重新计算ui…uk</p>
+<p>4) 重新标记ci…一直repeat至重新计算出的ui=ci（即最近的中心点就等于同属中心点x的平均值）</p>
+<p>第一步，随机选择两个中心点<br><img src="/Users/wong/Desktop/屏幕快照 2016-08-04 上午12.00.46.png" alt="image"></p>
+<p>第二步，每个x都分属于其中一个中心点<br><img src="/Users/wong/Desktop/屏幕快照 2016-08-04 上午12.01.04.png" alt="image"></p>
+<p>第三步，重新计算中心点，标记属于同一个中心点x的均值作为新中心点<br><img src="/Users/wong/Desktop/屏幕快照 2016-08-04 上午12.02.07.png" alt="image"></p>
+<p>再重新标记x属于哪个中心点<br><img src="/Users/wong/Desktop/屏幕快照 2016-08-04 上午12.03.08.png" alt="image"></p>
+<p>最后，如果ui不再发生变化，就ok了<br><img src="/Users/wong/Desktop/屏幕快照 2016-08-04 上午12.03.12.png" alt="image"></p>
+<p>K-Means的输入：</p>
+<p>1) K</p>
+<p>2) X<br><img src="/Users/wong/Desktop/屏幕快照 2016-08-04 上午12.04.27.png" alt="image"><br><img src="/Users/wong/Desktop/屏幕快照 2016-08-04 上午12.08.49.png" alt="image"></p>
+<p>有可能数据很难分出不同的cluster<br><img src="/Users/wong/Desktop/屏幕快照 2016-08-04 上午12.15.57.png" alt="image"></p>
+<h3 id="Optimization-Objective"><a href="#Optimization-Objective" class="headerlink" title="Optimization Objective"></a>Optimization Objective</h3><ul>
+<li><p>uk:第i个cluster中心（有k个）</p>
+</li>
+<li><p>ci：每个xi属于哪个cluster中心(i:1…m)</p>
+</li>
+<li><p>Uci:uk=ci，终止状态</p>
+</li>
+</ul>
+<p>uk初始化后，每个xi都有个ci记录他属于哪个cluster(1…k)。每一次迭代的时候回重新计算uk与ci。直到uk=uci，找到最优解。</p>
+<p>目标函数： J=min (x-uci)^2/m， J应该是个单调递增函数。</p>
+<p>每次迭代调整uk、ci：</p>
+<p>1）The cluster assignment step, where the parameters c(i) are updated.</p>
+<p>2) Move the cluster centroids, where the centroids μk are updated.</p>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-04%20%E4%B8%8B%E5%8D%888.23.09.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-04%20%E4%B8%8B%E5%8D%888.30.38.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-04%20%E4%B8%8B%E5%8D%888.32.32.png" alt="image"></p>
+<p>涉及两个问题：</p>
+<p>1） uk怎么选取<br>2） 输入的k怎么选取</p>
+<h3 id="issue1-Random-Initialization"><a href="#issue1-Random-Initialization" class="headerlink" title="issue1 Random Initialization"></a>issue1 Random Initialization</h3><p>通常k&lt;m<br>随机选取k个xi作为uk<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-04%20%E4%B8%8B%E5%8D%888.35.52.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-04%20%E4%B8%8B%E5%8D%888.56.24.png" alt="image"></p>
+<p>由于有可能J会卡在某个local optima里，所以可以多次随机初始化uk计算J，选择使得J最小的ci，uk。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-04%20%E4%B8%8B%E5%8D%889.00.08.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-04%20%E4%B8%8B%E5%8D%889.01.42.png" alt="image"></p>
+<h3 id="issue2-Choosing-the-Number-of-Clusters"><a href="#issue2-Choosing-the-Number-of-Clusters" class="headerlink" title="issue2 Choosing the Number of Clusters"></a>issue2 Choosing the Number of Clusters</h3><p>那么k的个数怎么选择呢？</p>
+<p>比如下图，可以选择k=2，3，4…</p>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-04%20%E4%B8%8B%E5%8D%889.05.42.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-04%20%E4%B8%8B%E5%8D%889.05.51.png" alt="image"><br>方法一：Elbow method</p>
+<p>但是现实很美好，实际常常遇到右边的情况，很难找到拐点。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-04%20%E4%B8%8B%E5%8D%889.13.48.png" alt="image"></p>
+<p>因此，方法二：</p>
+<p>根据实际的业务需求来划分k，e.g.衣服尺码是分SML，还是XS、S、M、L、XL<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-04%20%E4%B8%8B%E5%8D%889.17.33.png" alt="image"></p>
+<h1 id="dimensionality-reduction"><a href="#dimensionality-reduction" class="headerlink" title="dimensionality reduction"></a>dimensionality reduction</h1><p>降维的作用：</p>
+<p>1）降低资源占用（内存\存储）等<br>2）加快算法速度</p>
+<p>激励因素一：Data Compression<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-04%20%E4%B8%8B%E5%8D%8811.08.29.png" alt="image"><br>激励因素二：方便可视化<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-04%20%E4%B8%8B%E5%8D%8811.16.33.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-04%20%E4%B8%8B%E5%8D%8811.17.11.png" alt="image"></p>
+<h2 id="Principal-Component-Analysis"><a href="#Principal-Component-Analysis" class="headerlink" title="Principal Component Analysis"></a>Principal Component Analysis</h2><ul>
+<li>PCA作为降维的一个重要方法：</li>
+</ul>
+<blockquote>
+<p>寻找一个低维的投射平面，使得project error最小（数据点投射到平面的距离）。同样的也是在PCA前，做mean normalization and feature scaling</p>
+</blockquote>
+<p>比如下面的例子中，紫色的属于不好的PCA，因为每个x平面投影都很远。</p>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-05%20%E4%B8%8B%E5%8D%889.46.10.png" alt="image"></p>
+<p>下图中，左边是2D降到1D的例子，右边是个多维3D降到2D的例子。寻找的向量ui的正负，没有什么关系，因为一旦找到一个ui，不论正负，都能确定确定一个方向。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-05%20%E4%B8%8B%E5%8D%889.52.02.png" alt="image"></p>
+<p>虽然PCA看上去很像linear regression，但是是不一样的。</p>
+<p>1） linear的J中考察的是预测的y与实际y的距离，而PCA是x在方向上的投影。</p>
+<p>2） linear中会根据x来预测y每个x的地位不一样，PCA中每个x被同等对待<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-05%20%E4%B8%8B%E5%8D%889.54.08.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-05%20%E4%B8%8B%E5%8D%889.56.22.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-05%20%E4%B8%8B%E5%8D%8810.04.23.png" alt="image"></p>
+<p>PCA Algorithm:</p>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-05%20%E4%B8%8B%E5%8D%8810.35.24.png" alt="image"><br>1) 先处理数据:计算均值，mean normalization，feature scaling。Xj(i)= (Xj(i)-μj)/sj<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-05%20%E4%B8%8B%E5%8D%8810.09.40.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-05%20%E4%B8%8B%E5%8D%8810.21.44.png" alt="image"><br>2）计算协方差矩阵 sigma=X’*X /m</p>
+<p>3) 计算特征向量和特征值：其中可通过svd或者egi的方法提取。SVD为奇异值分解</p>
+<p>[U,S,V]=svd(sigma)<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-05%20%E4%B8%8B%E5%8D%8810.28.21.png" alt="image"></p>
+<p>4)选取特征向量到k维Ureduce=U[1:k]</p>
+<p>5)xi降维到zi，zi=Ureduce*xi<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-05%20%E4%B8%8B%E5%8D%8810.32.02.png" alt="image"></p>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-05%20%E4%B8%8B%E5%8D%8810.50.26.png" alt="image"></p>
+<h3 id="Reconstruction-from-compressed-representation"><a href="#Reconstruction-from-compressed-representation" class="headerlink" title="Reconstruction from compressed representation"></a>Reconstruction from compressed representation</h3><p>前面都是PCA达到降维，那么如何从低维回到高维么？</p>
+<p>Xapprox = U * z </p>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-05%20%E4%B8%8B%E5%8D%8810.56.22.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-05%20%E4%B8%8B%E5%8D%8810.57.39.png" alt="image"></p>
+<h3 id="choosing-k"><a href="#choosing-k" class="headerlink" title="choosing k"></a>choosing k</h3><p>通常的思路是选取一个k，可以保证一定程度的特征值e.g.90%、95%</p>
+<p>选取k的值从1开始，计算每个k的Ureduce、z值、xapprox值，然后计算||x-xapprox||/||x||<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-05%20%E4%B8%8B%E5%8D%8811.07.10.png" alt="image"><br>数学公式可以推导出来||x-xapprox||/||x||=1-Sii(1-k)/Sii(1-n)<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-05%20%E4%B8%8B%E5%8D%8811.24.34.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-05%20%E4%B8%8B%E5%8D%8811.44.59.png" alt="image"></p>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-05%20%E4%B8%8B%E5%8D%8811.46.33.png" alt="image"></p>
+<h2 id="Application"><a href="#Application" class="headerlink" title="Application"></a>Application</h2><p>PCA 适合用于以下两种情况：</p>
+<ol>
+<li><p>压缩，以减少内存、存储</p>
+</li>
+<li><p>可视化高维数据<br><img src="/Users/wong/Desktop/屏幕快照 2016-08-06 上午12.09.40.png" alt="image"></p>
+</li>
+</ol>
+<p>但是PCA只用于training set<br><img src="/Users/wong/Desktop/屏幕快照 2016-08-06 上午12.07.12.png" alt="image"></p>
+<p>PCA经常误用于解决overfit问题，因为看上去维度低了，feature少了。</p>
+<p><strong> 错！</strong> PCA不会考虑y的标签，也没有y的标签。有可能对y有价值的信息在PCA中已经被丢掉了。所以overfit得问题还是要用之前说的regularization。<br><img src="/Users/wong/Desktop/屏幕快照 2016-08-06 上午12.12.57.png" alt="image"></p>
+<p>设计ML算法的时候，也很容易在算法前通过PCA对数据进行压缩。</p>
+<p><strong> 错！</strong> 需考虑不通过PCA应该怎么做，只有在确实存储是瓶颈或者原数据集上效果很好但是很慢的时候，用PCA<br><img src="/Users/wong/Desktop/屏幕快照 2016-08-06 上午12.15.30.png" alt="image"></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Coursera/">Coursera</a><a href="/tags/Andrew-Ng/">Andrew Ng</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://tnxy.github.io/2016/08/08/ML-w8/" data-title="ML-w8 | xiyuのworkspace" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/07/31/python-c1-md/"  title="python 数据分析（一）">
+ <strong>NEXT:</strong><br/> 
+ <span>python 数据分析（一）
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Clustering"><span class="toc-number">1.</span> <span class="toc-text">Clustering</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Unsupervised-Learning-Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Unsupervised Learning:Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#K-Means-Algorithm"><span class="toc-number">1.2.</span> <span class="toc-text">K-Means Algorithm</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Optimization-Objective"><span class="toc-number">1.2.1.</span> <span class="toc-text">Optimization Objective</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#issue1-Random-Initialization"><span class="toc-number">1.2.2.</span> <span class="toc-text">issue1 Random Initialization</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#issue2-Choosing-the-Number-of-Clusters"><span class="toc-number">1.2.3.</span> <span class="toc-text">issue2 Choosing the Number of Clusters</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#dimensionality-reduction"><span class="toc-number">2.</span> <span class="toc-text">dimensionality reduction</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Principal-Component-Analysis"><span class="toc-number">2.1.</span> <span class="toc-text">Principal Component Analysis</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Reconstruction-from-compressed-representation"><span class="toc-number">2.1.1.</span> <span class="toc-text">Reconstruction from compressed representation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#choosing-k"><span class="toc-number">2.1.2.</span> <span class="toc-text">choosing k</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Application"><span class="toc-number">2.2.</span> <span class="toc-text">Application</span></a></li></ol></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分類</p>
+		<ul>
+		
+			<li><a href="/categories/Data-Analysis/" title="Data Analysis">Data Analysis<sup>1</sup></a></li>
+		
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>7</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Andrew-Ng/" title="Andrew Ng">Andrew Ng<sup>7</sup></a></li>
+		
+			<li><a href="/tags/Coursera/" title="Coursera">Coursera<sup>7</sup></a></li>
+		
+			<li><a href="/tags/Data-Analysis/" title="Data Analysis">Data Analysis<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>7</sup></a></li>
+		
+			<li><a href="/tags/Python/" title="Python">Python<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		<a href="https://github.com/https://github.com/tnxy" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2016 
+		
+		<a href="http://tnxy.github.io" target="_blank" title="xiyu">xiyu</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>
