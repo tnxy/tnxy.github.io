@@ -38,7 +38,7 @@ ClusteringUnsupervised Learning:Introduction监督 vs 非监督学习：
 				<h1 class="site-name"><a href="/" title="xiyuのworkspace">xiyuのworkspace</a></h1>
 				<h2 class="blog-motto"></h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -51,7 +51,7 @@ ClusteringUnsupervised Learning:Introduction监督 vs 非监督学习：
 					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:tnxy.github.io">
 					</form>
 					
@@ -75,7 +75,7 @@ ClusteringUnsupervised Learning:Introduction监督 vs 非监督学习：
     </p>
   <p class="article-time">
     <time datetime="2016-08-08T15:46:41.000Z" itemprop="datePublished">2016-08-08</time>
-    更新日期:<time datetime="2016-08-08T15:47:25.000Z" itemprop="dateModified">2016-08-08</time>
+    Updated:<time datetime="2016-08-09T14:36:02.000Z" itemprop="dateModified">2016-08-09</time>
     
   </p>
 </header>
@@ -83,7 +83,7 @@ ClusteringUnsupervised Learning:Introduction监督 vs 非监督学习：
 		
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目錄</strong>
+			<strong class="toc-title">Contents</strong>
 		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Clustering"><span class="toc-number">1.</span> <span class="toc-text">Clustering</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Unsupervised-Learning-Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Unsupervised Learning:Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#K-Means-Algorithm"><span class="toc-number">1.2.</span> <span class="toc-text">K-Means Algorithm</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Optimization-Objective"><span class="toc-number">1.2.1.</span> <span class="toc-text">Optimization Objective</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#issue1-Random-Initialization"><span class="toc-number">1.2.2.</span> <span class="toc-text">issue1 Random Initialization</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#issue2-Choosing-the-Number-of-Clusters"><span class="toc-number">1.2.3.</span> <span class="toc-text">issue2 Choosing the Number of Clusters</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#dimensionality-reduction"><span class="toc-number">2.</span> <span class="toc-text">dimensionality reduction</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Principal-Component-Analysis"><span class="toc-number">2.1.</span> <span class="toc-text">Principal Component Analysis</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Reconstruction-from-compressed-representation"><span class="toc-number">2.1.1.</span> <span class="toc-text">Reconstruction from compressed representation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#choosing-k"><span class="toc-number">2.1.2.</span> <span class="toc-text">choosing k</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Application"><span class="toc-number">2.2.</span> <span class="toc-text">Application</span></a></li></ol></li></ol>
 		</div>
 		
@@ -165,14 +165,14 @@ ClusteringUnsupervised Learning:Introduction监督 vs 非监督学习：
 <ol>
 <li><p>压缩，以减少内存、存储</p>
 </li>
-<li><p>可视化高维数据<br><img src="/Users/wong/Desktop/屏幕快照 2016-08-06 上午12.09.40.png" alt="image"></p>
+<li><p>可视化高维数据<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-06%20%E4%B8%8B%E5%8D%8812.09.40.png" alt="image"></p>
 </li>
 </ol>
-<p>但是PCA只用于training set<br><img src="/Users/wong/Desktop/屏幕快照 2016-08-06 上午12.07.12.png" alt="image"></p>
+<p>但是PCA只用于training set<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-06%20%E4%B8%8B%E5%8D%8812.07.12.png" alt="image"></p>
 <p>PCA经常误用于解决overfit问题，因为看上去维度低了，feature少了。</p>
-<p><strong> 错！</strong> PCA不会考虑y的标签，也没有y的标签。有可能对y有价值的信息在PCA中已经被丢掉了。所以overfit得问题还是要用之前说的regularization。<br><img src="/Users/wong/Desktop/屏幕快照 2016-08-06 上午12.12.57.png" alt="image"></p>
+<p><strong> 错！</strong> PCA不会考虑y的标签，也没有y的标签。有可能对y有价值的信息在PCA中已经被丢掉了。所以overfit得问题还是要用之前说的regularization。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-06%20%E4%B8%8B%E5%8D%8812.12.57.png" alt="image"></p>
 <p>设计ML算法的时候，也很容易在算法前通过PCA对数据进行压缩。</p>
-<p><strong> 错！</strong> 需考虑不通过PCA应该怎么做，只有在确实存储是瓶颈或者原数据集上效果很好但是很慢的时候，用PCA<br><img src="/Users/wong/Desktop/屏幕快照 2016-08-06 上午12.15.30.png" alt="image"></p>
+<p><strong> 错！</strong> 需考虑不通过PCA应该怎么做，只有在确实存储是瓶颈或者原数据集上效果很好但是很慢的时候，用PCA<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-06%20%E4%B8%8B%E5%8D%8812.15.30.png" alt="image"></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -218,20 +218,20 @@ ClusteringUnsupervised Learning:Introduction监督 vs 非监督学习：
 </section>
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目錄</strong>
+  <strong class="toc-title">Contents</strong>
   <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Clustering"><span class="toc-number">1.</span> <span class="toc-text">Clustering</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Unsupervised-Learning-Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Unsupervised Learning:Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#K-Means-Algorithm"><span class="toc-number">1.2.</span> <span class="toc-text">K-Means Algorithm</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Optimization-Objective"><span class="toc-number">1.2.1.</span> <span class="toc-text">Optimization Objective</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#issue1-Random-Initialization"><span class="toc-number">1.2.2.</span> <span class="toc-text">issue1 Random Initialization</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#issue2-Choosing-the-Number-of-Clusters"><span class="toc-number">1.2.3.</span> <span class="toc-text">issue2 Choosing the Number of Clusters</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#dimensionality-reduction"><span class="toc-number">2.</span> <span class="toc-text">dimensionality reduction</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Principal-Component-Analysis"><span class="toc-number">2.1.</span> <span class="toc-text">Principal Component Analysis</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Reconstruction-from-compressed-representation"><span class="toc-number">2.1.1.</span> <span class="toc-text">Reconstruction from compressed representation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#choosing-k"><span class="toc-number">2.1.2.</span> <span class="toc-text">choosing k</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Application"><span class="toc-number">2.2.</span> <span class="toc-text">Application</span></a></li></ol></li></ol>
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分類</p>
+	<p class="asidetitle">Categories</p>
 		<ul>
 		
 			<li><a href="/categories/Data-Analysis/" title="Data Analysis">Data Analysis<sup>1</sup></a></li>
@@ -244,7 +244,7 @@ ClusteringUnsupervised Learning:Introduction监督 vs 非监督学习：
 
   
 <div class="tagslist">
-	<p class="asidetitle">標簽</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			<li><a href="/tags/Andrew-Ng/" title="Andrew Ng">Andrew Ng<sup>7</sup></a></li>
@@ -262,7 +262,7 @@ ClusteringUnsupervised Learning:Introduction监督 vs 非监督学习：
 
 
   <div class="rsspart">
-	<a href="null" target="_blank" title="rss">RSS 訂閱</a>
+	<a href="null" target="_blank" title="rss">RSS</a>
 </div>
 
 </aside>
