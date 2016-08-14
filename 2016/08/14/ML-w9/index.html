@@ -1,0 +1,402 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>ML-w9 | xiyuのworkspace</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="xiyu">
+    
+    <meta name="description" content="机器学习课程笔记系列 I —— Andrew Ng w9 Anomaly Detection 
+异常检测（Anomaly Detection ）Density EstimationDefination: Anomaly Detection
+中心思想就是根据训练集的输入，判断哪些范围内的认为是正常的，">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="xiyuのworkspace" title="xiyuのworkspace"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="xiyuのworkspace">xiyuのworkspace</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:tnxy.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/14/ML-w9/" title="ML-w9" itemprop="url">ML-w9</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://tnxy.github.io" title="xiyu">xiyu</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2016-08-14T15:55:05.000Z" itemprop="datePublished">2016-08-14</time>
+    Updated:<time datetime="2016-08-14T15:59:44.000Z" itemprop="dateModified">2016-08-14</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#异常检测（Anomaly-Detection-）"><span class="toc-number">1.</span> <span class="toc-text">异常检测（Anomaly Detection ）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Density-Estimation"><span class="toc-number">1.1.</span> <span class="toc-text">Density Estimation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Building-an-Anomaly-Detection-System"><span class="toc-number">1.2.</span> <span class="toc-text">Building an Anomaly Detection System</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Multivariate-Gaussian-Distribution"><span class="toc-number">1.3.</span> <span class="toc-text">Multivariate Gaussian Distribution</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Recommender-Systems"><span class="toc-number">2.</span> <span class="toc-text">Recommender Systems</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Predicting-Movie-Ratings"><span class="toc-number">2.1.</span> <span class="toc-text">Predicting Movie Ratings</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Collaborative-Filering"><span class="toc-number">2.2.</span> <span class="toc-text">Collaborative Filering</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Low-Rank-Matrix-Factorization"><span class="toc-number">2.3.</span> <span class="toc-text">Low Rank Matrix Factorization</span></a></li></ol></li></ol>
+		</div>
+		
+		<p> <strong><em> 机器学习课程笔记系列 I —— Andrew Ng w9 Anomaly Detection </em></strong></p>
+<h1 id="异常检测（Anomaly-Detection-）"><a href="#异常检测（Anomaly-Detection-）" class="headerlink" title="异常检测（Anomaly Detection ）"></a>异常检测（Anomaly Detection ）</h1><h2 id="Density-Estimation"><a href="#Density-Estimation" class="headerlink" title="Density Estimation"></a>Density Estimation</h2><p>Defination: Anomaly Detection</p>
+<p>中心思想就是根据训练集的输入，判断哪些范围内的认为是正常的，哪些认为是异常值的。</p>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-09%20%E4%B8%8B%E5%8D%8811.10.32.png" alt="image"></p>
+<p>假设我们有一个数据集{x1,x2,…,xm}, 整体来说：</p>
+<p>1) 根据数据集建立一个model p(x)，如何建立请看下面一小节。</p>
+<p>2） 选择一个阈值，如果p（xtest）&lt; 阈值，认为是异常点; p（xtest）&gt; 阈值，则认为是ok的</p>
+<p>异常检测的常见应用：</p>
+<p>1）用户的欺诈检测（e.g.购物网站等）：把用户的每个活动都作为一个feature建模model p(x)</p>
+<p>2) 生产检测：把生产的每个指标（e.g.生产电脑的话，CPU、memory等）作为一个feature建模</p>
+<p><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-09%20%E4%B8%8B%E5%8D%8811.17.57.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-09%20%E4%B8%8B%E5%8D%8811.20.40.png" alt="image"></p>
+<p><strong> 阈值的选择：如果阈值设的很大，很可能大部分样本都被认为是异常值。 </strong><br> <img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-09%20%E4%B8%8B%E5%8D%8811.22.03.png" alt="image"></p>
+<blockquote>
+<p>issue 1：如何建立model p呢？</p>
+</blockquote>
+<ul>
+<li>通过高斯分布建立p，每个feature计算mu与sigma^2，因为样本见独立同分布，所以p(x)=p(x1;mu1,sigma1^2)p(x2;mu2,sigma2^2)…</li>
+</ul>
+<p> <img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-10%20%E4%B8%8B%E5%8D%889.00.40.png" alt="image"><br> <img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-10%20%E4%B8%8B%E5%8D%889.07.05.png" alt="image"><br> <img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-10%20%E4%B8%8B%E5%8D%889.13.03.png" alt="image"><br> <img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-10%20%E4%B8%8B%E5%8D%889.21.14.png" alt="image"></p>
+<h2 id="Building-an-Anomaly-Detection-System"><a href="#Building-an-Anomaly-Detection-System" class="headerlink" title="Building an Anomaly Detection System"></a>Building an Anomaly Detection System</h2><p><strong> 异常检测的整体过程：</strong></p>
+<p> 一般情况下，y=1标记为异常，y=0标记为normal。通常情况下样本数据多normal </p>
+<ol>
+<li>选择features，在训练集中，计算每个feature的mu，sigma</li>
+<li>计算p（x）</li>
+<li>选择阈值Epsilon，如果p(x)&lt;Epsilon,标记为异常</li>
+<li>为了选择合适的Epsilon，通过CV集合的预测结果的evalutaion metrics（e.g F1）选择。<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-10%20%E4%B8%8B%E5%8D%889.28.08.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-10%20%E4%B8%8B%E5%8D%889.55.08.png" alt="image"></li>
+</ol>
+<p>至此我们发现异常检测与监督学习很像，那有什么区别呢。</p>
+<ol>
+<li>异常检测y=1的数量很小，y=0的数量很多。</li>
+<li>y=1可能的情况很多，很多知道会出现什么。</li>
+<li>常见的应用：欺诈检验，生产检测等<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-10%20%E4%B8%8B%E5%8D%8810.54.26.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-10%20%E4%B8%8B%E5%8D%8810.57.27.png" alt="image"></li>
+</ol>
+<blockquote>
+<p>issue 2:feature的选择</p>
+</blockquote>
+<p>feature可能是非高斯分布的</p>
+<p> <img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-10%20%E4%B8%8B%E5%8D%8811.15.52.png" alt="image"></p>
+<h2 id="Multivariate-Gaussian-Distribution"><a href="#Multivariate-Gaussian-Distribution" class="headerlink" title="Multivariate Gaussian Distribution"></a>Multivariate Gaussian Distribution</h2><p> 对于多变量（多feature的异常检测）</p>
+<p>上面的方法需要计算每个p（xi;mui,sigmai^2）,现在才去multivaribale gaussian的公式如下：</p>
+<p>新公式的的特点：</p>
+<ol>
+<li>自动捕捉feature间关系，也就是x的关系，不再需要每次自己考虑什么样的x合适。</li>
+<li>需要矩阵可逆，也就是说需要m&gt;&gt;n</li>
+<li>缺点：计算量大，适合n不太大的情况<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-12%20%E4%B8%8B%E5%8D%889.55.15.png" alt="image"><br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-12%20%E4%B8%8B%E5%8D%8810.00.36.png" alt="image"></li>
+</ol>
+<h1 id="Recommender-Systems"><a href="#Recommender-Systems" class="headerlink" title="Recommender Systems"></a>Recommender Systems</h1><p>很有意思，推荐系统在业界很风行并且是很盛行的应用，但是在学术界现在比较少关注。</p>
+<h2 id="Predicting-Movie-Ratings"><a href="#Predicting-Movie-Ratings" class="headerlink" title="Predicting Movie Ratings"></a>Predicting Movie Ratings</h2><p>那么推荐系统是个解决什么问题的呢？拿电影推荐未例</p>
+<p>我们有一个很大的电影库，这些电影可能会有一些类型的标签（比如，罗曼蒂克型的，喜剧片，西部牛仔片等），我们有很多user会对某些电影打分，根据他们的打分结果跟电影标签的情况，我们可以猜测用户喜欢的电影类型推荐给他们电影。</p>
+<p>nu=用户数，nm=电影数，r(i,j)与y（i,j）都是一个nmxnu的矩阵，r表示用户j是否对电影i做了评价，y表示具体的评分数。<br> <img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-12%20%E4%B8%8B%E5%8D%8811.09.07.png" alt="image"></p>
+<p> 对于这样的一个问题，我们可以通过基于内容的推荐系统解决这个问题:根据用户的现有打分，推测他们对其他movie的打分。<br> 每个用户对每个电影的评价都可以看成是一个独立的线性回归问题。</p>
+<p> 每个电影都有一个x表示电影类型（xi），每个用户都有个theta参数向量（thetaj）。J函数就是所有打分的评价的真实值与预测值的平方和最小，再加上正则惩罚项。采用gradient的方式迭代计算theta<br> <img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-12%20%E4%B8%8B%E5%8D%8811.20.43.png" alt="image"><br> <img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-12%20%E4%B8%8B%E5%8D%8811.28.30.png" alt="image"><br> <img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-12%20%E4%B8%8B%E5%8D%8811.33.41.png" alt="image"></p>
+<h2 id="Collaborative-Filering"><a href="#Collaborative-Filering" class="headerlink" title="Collaborative Filering"></a>Collaborative Filering</h2><p>对于基于内容的推荐，我们需要先找一些专家或者别的方法，先计算每个movie的x（即对每个movie评估他的特征值），然后再对每个用户的theta，然后做评估。现实中，不太现实，很费时间。<br><img src="/Users/wong/Desktop/屏幕快照 2016-08-14 下午11.16.44.png" alt="image"></p>
+<p>因此，我们需要一个新的方法，即使我们不知道x应该是什么，也可以工作。新的方法叫做协同过滤方法。<br>随机选取一些theta-&gt;x-&gt;theta-&gt;x…<br> <img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-13%20%E4%B8%8B%E5%8D%8812.35.15.png" alt="image"><br> <img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-13%20%E4%B8%8B%E5%8D%881.24.17.png" alt="image"><br> <img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-13%20%E4%B8%8B%E5%8D%881.29.13.png" alt="image"></p>
+<p>协同过滤的J：min所有打分的评价的真实值与预测值的平方和+theta的惩罚项+x的惩罚项(theta、x不再有theta0 x0)<br> <img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-13%20%E4%B8%8B%E5%8D%881.53.26.png" alt="image"><br> <img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-13%20%E4%B8%8B%E5%8D%881.56.20.png" alt="image"></p>
+<h2 id="Low-Rank-Matrix-Factorization"><a href="#Low-Rank-Matrix-Factorization" class="headerlink" title="Low Rank Matrix Factorization"></a>Low Rank Matrix Factorization</h2><p>在推荐系统中，左边的是Y的真实值，右边的是Y的预测值：其中theta表现的用户的参数向量，x表示电影的特征向量.<br>X、Theta的定义如下，并且X*theta‘有个低秩矩阵的特性<br> <img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-13%20%E4%B8%8B%E5%8D%882.09.47.png" alt="image"></p>
+<p>在计算完了电影特征向量x后，可以计算movie的similarity<br> <img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-13%20%E4%B8%8B%E5%8D%882.17.50.png" alt="image"></p>
+<p> 由于用户并不会对所有的movie打分，所以在实施中采用mean normalization的方法更好。</p>
+<p> 如果采用原来的方式，对于一个新用户，数据库中没有他的任何对电影的评价信息，因此我们很容易将他的theta标记是0，因为他对所有电影的评价都预测是0.<br> <img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-13%20%E4%B8%8B%E5%8D%882.21.11.png" alt="image"></p>
+<p> 但是如果我们采用归一化：</p>
+<ol>
+<li>计算每个电影的mu。</li>
+<li>Y=Y-mu</li>
+<li>根据新的Y寻找theta，x</li>
+<li>y的预测值=x*theta‘+mu<br><img src="http://o9rmadjtd.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-13%20%E4%B8%8B%E5%8D%882.25.53.png" alt="image"></li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Coursera/">Coursera</a><a href="/tags/Andrew-Ng/">Andrew Ng</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://tnxy.github.io/2016/08/14/ML-w9/" data-title="ML-w9 | xiyuのworkspace" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/08/08/ML-w8/"  title="ML-w8">
+ <strong>NEXT:</strong><br/> 
+ <span>ML-w8
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#异常检测（Anomaly-Detection-）"><span class="toc-number">1.</span> <span class="toc-text">异常检测（Anomaly Detection ）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Density-Estimation"><span class="toc-number">1.1.</span> <span class="toc-text">Density Estimation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Building-an-Anomaly-Detection-System"><span class="toc-number">1.2.</span> <span class="toc-text">Building an Anomaly Detection System</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Multivariate-Gaussian-Distribution"><span class="toc-number">1.3.</span> <span class="toc-text">Multivariate Gaussian Distribution</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Recommender-Systems"><span class="toc-number">2.</span> <span class="toc-text">Recommender Systems</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Predicting-Movie-Ratings"><span class="toc-number">2.1.</span> <span class="toc-text">Predicting Movie Ratings</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Collaborative-Filering"><span class="toc-number">2.2.</span> <span class="toc-text">Collaborative Filering</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Low-Rank-Matrix-Factorization"><span class="toc-number">2.3.</span> <span class="toc-text">Low Rank Matrix Factorization</span></a></li></ol></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+			<li><a href="/categories/Data-Analysis/" title="Data Analysis">Data Analysis<sup>1</sup></a></li>
+		
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>8</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Andrew-Ng/" title="Andrew Ng">Andrew Ng<sup>8</sup></a></li>
+		
+			<li><a href="/tags/Coursera/" title="Coursera">Coursera<sup>8</sup></a></li>
+		
+			<li><a href="/tags/Data-Analysis/" title="Data Analysis">Data Analysis<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>8</sup></a></li>
+		
+			<li><a href="/tags/Python/" title="Python">Python<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		<a href="https://github.com/https://github.com/tnxy" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2016 
+		
+		<a href="http://tnxy.github.io" target="_blank" title="xiyu">xiyu</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>
